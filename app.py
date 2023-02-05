@@ -3,6 +3,10 @@ import pandas as pd
 import plotly.express as px
 import sqlite3
 
+from ipyvizzu import Data, Config, Style
+from ipyvizzustory import Slide, Step
+from ipyvizzustory import Story  # or
+
 
 st.set_page_config(page_title="HR_INSIGHT", page_icon=":bar_chart:", layout="wide")
 

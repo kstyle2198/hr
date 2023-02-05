@@ -2,3 +2,7 @@ jupyter
 hrenv
 .ipynb_checkpoints
 xl_to_db.py
+my-micro
+.idea
+.deta
+first_micro
