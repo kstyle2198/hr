@@ -3,6 +3,8 @@ import streamlit as st
 from ipyvizzu import Data, Config, Style
 from ipyvizzustory import Story, Slide, Step
 
+st.set_page_config(page_title="회사비교", page_icon=":bar_chart:", layout="wide")
+
 st.title("test1")
 st.markdown("---")
 
