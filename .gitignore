@@ -2,6 +2,8 @@ jupyter
 hrenv
 .ipynb_checkpoints
 xl_to_db.py
+xl_to_db_pension.py
+db_to_xl.py
 .idea
 .deta
 reports
