@@ -39,7 +39,7 @@ gdf.rename(columns={'임시키':'인원'}, inplace=True)
 
 
 ################################################################
-st.title("Human Capital Insight")
+st.title("HR Data Story")
 st.markdown("---")
 
 
