@@ -222,18 +222,14 @@ def iv_분기별총원변동현황():
 
 
 ###########################################################################################################################
-tab1, tab2, tab3 = st.tabs(["비주1", "비주2", "비주3"])
-with tab1:
-    with st.container():
-        iv_분기별총원변동현황()
 
-with tab2:
+col1, col2 = st.columns(2)
+
+with col1:
+    iv_분기별총원변동현황()
+
+with col2:
     ipyvizzu1()
-
-with tab3:
-    print("공란")
-
-
 
 
 ###########################################################################################################################
@@ -513,6 +509,10 @@ gdf3 = target_df3.groupby(['직급', '기준일자','사원유형'])[["임시키
 gdf = pd.concat([gdf0, gdf1, gdf2, gdf3], axis=0)
 
 
+
+
+
+
 def 분기별인원변동():
     fig = px.bar(gdf, x="기준일자", y="임시키", barmode="group",opacity=0.6)
     fig.update_layout(width=1400, height=400)
@@ -627,3 +627,4 @@ with col3:
     st.plotly_chart(선플라워3(), theme="streamlit", use_container_width=True)
 
 st.markdown("---")
+
