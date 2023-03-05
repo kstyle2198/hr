@@ -171,7 +171,7 @@ def ipyvizzu1():
     story.add_slide(slide10)
 
     story.set_feature("tooltip", True)
-    story.set_size(width=1500, height=500)
+    story.set_size(width=800, height=500)
     story.play()
 
 def iv_분기별총원변동현황():
@@ -217,14 +217,15 @@ def iv_분기별총원변동현황():
 
 
     story1.set_feature("tooltip", True)
-    story1.set_size(width=1500, height=500)
+    story1.set_size(width=800, height=500)
     story1.play()
 
 
 ###########################################################################################################################
 tab1, tab2, tab3 = st.tabs(["비주1", "비주2", "비주3"])
 with tab1:
-    iv_분기별총원변동현황()
+    with st.container():
+        iv_분기별총원변동현황()
 
 with tab2:
     ipyvizzu1()
