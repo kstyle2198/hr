@@ -49,7 +49,7 @@ with col1:
     
 with col2:
     gdf2 = gdf1.loc[(gdf1["회사"].isin(select1))&((gdf1["고용형태"].isin(select2))&(gdf1["사원유형"].isin(select3)))]
-    if select4 == '각사별 겸직임원 포함':
+    if select4 == '겸직임원 각사별 포함':
         vz_회사별임원변동(gdf2)
     else: 
         vz_회사별임원변동_겸직은_제뉴인(gdf2)
