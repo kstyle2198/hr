@@ -10,7 +10,7 @@ import datetime
 import plotly.figure_factory as ff
 from repo import *
 
-
+@st.cache_data
 def vz_style():
     my_style = Style(
         {
@@ -40,7 +40,7 @@ def vz_style():
     )
     return my_style
 
-
+@st.cache_data
 def vz_회사별총원변동(df):
     data1 = Data()
     data1.add_data_frame(df)
@@ -98,7 +98,7 @@ def vz_회사별총원변동(df):
     story1.set_size(width=800, height=500)
     story1.play()
     
-
+@st.cache_data
 def vz_회사별임원변동(df):
     gdf = df
     gdf = gdf[gdf["고용형태"] == "임원"]
@@ -158,15 +158,15 @@ def vz_회사별임원변동(df):
     story1.set_size(width=800, height=500)
     story1.play()
     
-
+@st.cache_data
 def vz_회사별임원변동_겸직은_제뉴인(df):
     gdf = df
     gdf = gdf.loc[(gdf["고용형태"] == "임원")&(gdf["겸직임원체크"] == 0)]
     data1 = Data()
     data1.add_data_frame(gdf)
-#     my_style = vz_style()
-#     story1 = Story(data = data1, style = my_style)
-    story1 = Story(data = data1)
+    my_style = vz_style()
+    story1 = Story(data = data1, style = my_style)
+    # story1 = Story(data = data1)
 
     title = "임원현황 (겸직임원 제뉴인 카운트)"
 
@@ -221,7 +221,7 @@ def vz_회사별임원변동_겸직은_제뉴인(df):
     
     
     
-    
+@st.cache_data
 def 사무연구직급별펀넬플롯(df):
     y = df.직급.tolist()
     x = df.임시키.tolist()
@@ -233,7 +233,7 @@ def 사무연구직급별펀넬플롯(df):
     fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
     return fig
 
-
+@st.cache_data
 def 연령박스플롯(df):
     total_df = df
     total_gdf = total_df.groupby(['기준일자','직급','연령'])[["임시키"]].count().reset_index().round()
@@ -242,7 +242,7 @@ def 연령박스플롯(df):
     return fig
 
 
-
+@st.cache_data
 def 성별구조(df):
     y = df.직급.tolist()
     x = df.임시키.tolist()
@@ -345,6 +345,7 @@ def vz_racing_chart1(df, 회사):
         )
         chart.show()
 
+@st.cache_data
 def create_sun_chart(df, 회사, 기준일자):
     gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑","직급", "연령", "Level1", "Level2", "겸직임원체크"])[["임시키"]].count().reset_index()
     gdf.rename(columns={'임시키':'인원'}, inplace=True)

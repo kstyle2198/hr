@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import pickle
+import streamlit as st
+
 
 
 with open("pickle_df1.pickle", 'rb') as filename:
@@ -15,7 +17,7 @@ with open("pickle_df1.pickle", 'rb') as filename:
 연령대정렬 = [60, 50, 40, 30, 20]
 
 
-
+@st.cache_data
 def create_ipyvizzu_gdf(df):
     gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑", "연령", "Level1", "Level2", "겸직임원체크"])[["임시키"]].count().reset_index()
     gdf['기준일자']= pd.Categorical(gdf['기준일자'], categories=기준일자정렬, ordered=True)
@@ -35,6 +37,7 @@ def create_ipyvizzu_gdf(df):
     gdf.rename(columns={'임시키':'인원'}, inplace=True)
     return gdf
 
+@st.cache_data
 def 사무연구직급펀넬플롯_df(회사):
     대상기간 = ['t20210801', 't20220101', 't20230101']
     대상사원유형 = ["사무기술직", "설계연구직", "전문직A", "사무지원/전문직B"]
@@ -44,7 +47,7 @@ def 사무연구직급펀넬플롯_df(회사):
 
     return gdf
 
-
+@st.cache_data
 def 사무연구연령대박스플롯_df(회사):
     대상기간 = ['t20210801', 't20220101', 't20230101']
     대상사원유형 = ["사무기술직", "설계연구직", "전문직A", "사무지원/전문직B"]
@@ -52,6 +55,7 @@ def 사무연구연령대박스플롯_df(회사):
     gdf = gdf.groupby(['연령', '기준일자','사원유형','직급'])[["임시키"]].count().reset_index()
     return gdf
 
+@st.cache_data
 def 사무연구성별_df(회사):
     대상기간 = ['t20210801', 't20220101', 't20230101']
     대상사원유형 = ["사무기술직", "설계연구직", "전문직A", "사무지원/전문직B"]
