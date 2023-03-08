@@ -267,7 +267,7 @@ def 성별구조(df):
     # fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
     # return fig
 
-
+@st.cache_data
 def convert_to_order(val):
     if val == 1:
         return 't20210801'
@@ -281,10 +281,13 @@ def convert_to_order(val):
         return 't20220701'
     elif val == 6:
         return 't20221001'
-    else:
+    elif val == 7:
         return 't20230101'
-
-def vz_racing_chart1(df, 회사):
+    else:
+        return None
+    
+@st.cache_data
+def vz_racing_chart1(df, 회사, dura):
     
     gdf = df[df["회사"]==회사]
     data = Data()
@@ -305,7 +308,7 @@ def vz_racing_chart1(df, 회사):
     style = Style(
         {
             "plot": {
-                "paddingLeft": 150,
+                "paddingLeft": 200,
                 "paddingTop": 25,
                 "yAxis": {
                     "color": "#ffffff00",
@@ -330,29 +333,33 @@ def vz_racing_chart1(df, 회사):
     chart = Chart(display=DisplayTarget.MANUAL)
     chart.animate(data, style)
     
-    for year in range(1, 7):
+    for year in range(1, 8):
         t1 = convert_to_order(year)
-        config["title"] = f"{회사} 분기별 조직별 인원변동 현황 - {t1}"
+        config["title"] = f"{회사} 인원변동 현황 - {t1}"
         chart.animate(
             Data.filter(f"parseInt(record.기준일자) == {year}"),
             Config(config),
-            duration=3,
+            duration=dura,
             x={"easing": "linear", "delay": 0},
             y={"delay": 0},
             show={"delay": 0},
             hide={"delay": 0},
             title={"duration": 0, "delay":0},
         )
-        chart.show()
+    return chart._repr_html_()
+
+
 
 @st.cache_data
-def create_sun_chart(df, 회사, 기준일자):
+def create_sun_chart(df, 회사, 기준일자, bool):
     gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑","직급", "연령", "Level1", "Level2", "겸직임원체크"])[["임시키"]].count().reset_index()
     gdf.rename(columns={'임시키':'인원'}, inplace=True)
     gdf = gdf.loc[(gdf["회사"] == 회사) & (gdf["기준일자"] == 기준일자) & (gdf["고용형태"] == "직원")& (gdf["사원유형"] != "생산기술직")& (gdf["사원유형"] != "별정직")]
     fig = px.sunburst(gdf, path=['Level1', 'Level2', '직급'], values='인원', color='Level1')
-    fig.update_traces(textinfo="label+value")
-    # fig.update_traces(textinfo="label+percent parent")
+    if bool:
+        fig.update_traces(textinfo="label+percent parent")
+    else:
+        fig.update_traces(textinfo="label+value")
     fig.update_layout(autosize=False)
     return fig
 

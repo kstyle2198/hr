@@ -65,24 +65,13 @@ def 사무연구성별_df(회사):
 
     return gdf
     
-    
-    
-    
-    # gdf = df.loc[(df["회사"].isin(회사))&(df["기준일자"].isin(대상기간))&(df["사원유형"].isin(대상사원유형))]
-    # gdf = gdf.groupby(['성별', '기준일자','사원유형','직급'])[["임시키"]].count().reset_index()
-    # gdf.rename(columns={'임시키':'인원'}, inplace=True)
-
-    # return gdf
-
-
-
 기준일자정렬 = ['t20210801', 't20211001', 't20220101', 't20220401', 't20220701', 't20221001', 't20230101']
 rangeindex1 = [1, 2, 3, 4, 5,  6, 7]
 
-
+@st.cache_data
 def racing_df1(df):
     기준일자정렬 = ['t20210801', 't20211001', 't20220101', 't20220401', 't20220701', 't20221001', 't20230101']
-    rangeindex1 = [1, 2, 3, 4, 5,  6, 7]
+    rangeindex1 = [1, 2, 3, 4, 5, 6, 7]
     
     gdf2 = df[['기준일자', '회사','그룹핑', 'Level1', 'Level2', '인원']]
     gdf2.reset_index(drop=True, inplace=True)
@@ -92,11 +81,7 @@ def racing_df1(df):
     gdf2['기준일자'].reset_index(inplace=False)
     return gdf2
     
-
-# def sunflower_df(df):
-#     gdf = df[['기준일자','그룹핑','Level1', 'Level2','직급','연령','성별','연령대','인원']]
-#     return gdf
-
+    
 ##############################################################################################3
 
 

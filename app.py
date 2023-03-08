@@ -5,10 +5,13 @@ from ipyvizzu import Data, Config, Style
 from ipyvizzustory import Story, Slide, Step
 import plotly.express as px
 import random
+import time
 import datetime
 import plotly.figure_factory as ff
 from repo import *
 from chart import *
+from streamlit.components.v1 import html
+
 
 st.set_page_config(page_title="HR-DataStory", page_icon="11", layout="wide")
 
@@ -22,8 +25,11 @@ gdf1 = create_ipyvizzu_gdf(df)
 
 
 ###############################################
-
-st.title(" 📉 :red[HR] :blue[Data] Story")
+col01, col02 = st.columns([1, 1])
+with col01:
+    st.title(" 📉 :red[HR] :blue[Data] Story")
+with col02:
+    st.markdown("공사중 - 대표 숫자 위치")
 st.markdown("---")
 
 
@@ -40,7 +46,7 @@ with col4:
     select4 = st.radio('✔️ **겸직 임원 처리 방식 선택**', ['겸직임원 각사별 포함', '겸직임원 제뉴인 소속 처리'])
 
 st.markdown("---")
-
+st.error("차트 하단의 삼각형 화살표를 클릭하면 차트 형태가 변경됩니다.")
 
 col1, col2  = st.columns([1, 1])
 with col1:
@@ -111,46 +117,70 @@ with st.expander("✌️ **사무/설계/연구/전문/사무지원 상세 보�
     
 st.markdown("---")
 st.subheader("✒️ **조직 그룹별 인원현황 (생산/별정 제외)**")
+st.success("시점별로 회사간 ***동일/유사 조직간 인원/직급 규모***를 비교할 수 있습니다.")
 
 
 col11, col22, col33  = st.columns([1, 1, 1])
 with col11:
-    col1_1, col2_1 = st.columns([1, 1])
+    col1_1, col1_2, col1_3 = st.columns([1, 1, 1])
     with col1_1:
-        comp1 = st.selectbox('회사 선택1', ['HG', 'HDI', 'HCE'])
+        comp1 = st.selectbox('**회사 선택1**', ['HG', 'HDI', 'HCE'])
+    with col1_2:
+        t1 = st.selectbox('**기준일자 선택1**', ['t20230101', 't20220101', 't20210801'])
+    with col1_3:
+        표시_전환1 = st.checkbox('**값/비율 표시 전환1**')
 
-    with col2_1:
-        t1 = st.selectbox('기준일자 선택1', ['t20230101', 't20220101', 't20210801'])
-    
     st.markdown("---")
-    st.plotly_chart(create_sun_chart(df, comp1, t1), theme="streamlit", use_container_width=True)
+    st.plotly_chart(create_sun_chart(df, comp1, t1, 표시_전환1), theme="streamlit", use_container_width=True)
     
 with col22:
-    col2_1, col2_2 = st.columns([1, 1])
+    col2_1, col2_2, col2_3 = st.columns([1, 1, 1])
     with col2_1:
-        comp2 = st.selectbox('회사 선택2', ['HDI', 'HCE', 'HG'])
-
+        comp2 = st.selectbox('**회사 선택2**', ['HDI', 'HCE', 'HG'])
     with col2_2:
-        t2 = st.selectbox('기준일자 선택2', ['t20230101', 't20220101', 't20210801'])
-        
+        t2 = st.selectbox('**기준일자 선택2**', ['t20230101', 't20220101', 't20210801'])
+    with col2_3:
+        표시_전환2 = st.checkbox('**값/비율 표시 전환2**')
+
     st.markdown("---")
-    st.plotly_chart(create_sun_chart(df, comp2, t2), theme="streamlit", use_container_width=True)
+    st.plotly_chart(create_sun_chart(df, comp2, t2, 표시_전환2), theme="streamlit", use_container_width=True)
     
 with col33:
-    col3_1, col3_2 = st.columns([1, 1])
+    col3_1, col3_2, col3_3 = st.columns([1, 1, 1])
     with col3_1:
-        comp3 = st.selectbox('회사 선택3', ['HCE', 'HDI', 'HG'])
-
+        comp3 = st.selectbox('**회사 선택3**', ['HCE', 'HDI', 'HG'])
     with col3_2:
-        t3= st.selectbox('기준일자 선택3', ['t20230101', 't20220101', 't20210801'])
+        t3= st.selectbox('**기준일자 선택3**', ['t20230101', 't20220101', 't20210801'])
+    with col3_3:
+        표시_전환3 = st.checkbox('**값/비율 표시 전환3**')
         
     st.markdown("---")
-    st.plotly_chart(create_sun_chart(df, comp3, t3), theme="streamlit", use_container_width=True)
+    st.plotly_chart(create_sun_chart(df, comp3, t3, 표시_전환3), theme="streamlit", use_container_width=True)
 
 st.markdown("---")
 
 
 
+gdf2 = racing_df1(gdf1)
+    
+with st.expander("✌️ **분기별 조직별 인원변동 현황 (Racing Chart)**"):
+    
+    st.info("인원 변동 효과를 극적으로 표현하기 위해 ***소수점 변동식***으로 표현되어 있습니다. 실제는 자연수 변동입니다.")
+
+    col41, col42 = st.columns([2, 1])
+    with col41:
+        col411, col412 = st.columns([1, 1])
+        with col411:
+            회사선택41 = st.selectbox('**회사 선택41**', ['HG', 'HDI', 'HCE'])
+        with col412:
+            Speed = st.selectbox('**속도 선택** (숫자가 작을수록 빠름)', [2, 3, 4, 5])
+        CHART = vz_racing_chart1(gdf2, 회사선택41, Speed)
+        html(CHART, width=4000, height=500)
+
+    with col42:
+        st.text("공란")
+
+st.markdown("end of the page")
 
 
 
