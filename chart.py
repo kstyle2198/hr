@@ -351,12 +351,12 @@ def vz_racing_chart1(df, 회사, dura):
 
 
 @st.cache_data
-def create_sun_chart(df, 회사, 기준일자, bool):
+def create_sun_chart(df, 회사, 기준일자, 조건):
     gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑","직급", "연령", "Level1", "Level2", "겸직임원체크"])[["임시키"]].count().reset_index()
     gdf.rename(columns={'임시키':'인원'}, inplace=True)
     gdf = gdf.loc[(gdf["회사"] == 회사) & (gdf["기준일자"] == 기준일자) & (gdf["고용형태"] == "직원")& (gdf["사원유형"] != "생산기술직")& (gdf["사원유형"] != "별정직")]
     fig = px.sunburst(gdf, path=['Level1', 'Level2', '직급'], values='인원', color='Level1')
-    if bool:
+    if 조건:
         fig.update_traces(textinfo="label+percent parent")
     else:
         fig.update_traces(textinfo="label+value")
