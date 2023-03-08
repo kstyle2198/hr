@@ -8,8 +8,8 @@ import random
 import time
 import datetime
 import plotly.figure_factory as ff
-from repo import *
-from chart import *
+from prepare_df import *
+from prepare_chart import *
 from streamlit.components.v1 import html
 
 
@@ -27,7 +27,7 @@ gdf1 = create_ipyvizzu_gdf(df)
 ###############################################
 col01, col02 = st.columns([1, 1])
 with col01:
-    st.title(" 📉 :red[HR] :blue[Data] Story")
+    st.title(" 📈 :red[HR] :blue[Data] Story")
 with col02:
     st.markdown("공사중 - 대표 숫자 위치")
 st.markdown("---")

@@ -72,7 +72,7 @@ rangeindex1 = [1, 2, 3, 4, 5,  6, 7]
 def racing_df1(df):
     기준일자정렬 = ['t20210801', 't20211001', 't20220101', 't20220401', 't20220701', 't20221001', 't20230101']
     rangeindex1 = [1, 2, 3, 4, 5, 6, 7]
-    
+    df = df[df["고용형태"]=="직원"]
     gdf2 = df[['기준일자', '회사','그룹핑', 'Level1', 'Level2', '인원']]
     gdf2.reset_index(drop=True, inplace=True)
     gdf2.index = pd.RangeIndex(start=0, stop=len(gdf2['기준일자']), step=1)
