@@ -31,7 +31,7 @@ def vz_style():
                     },
                     "title": {"fontSize": "0.2em", "paddingTop": "2.5em", "backgroundColor": "#A0A0A0"},
                 },
-                "marker": {"colorPalette": "#FB7185FF #E879F9FF #60A5FAFF #4ADE80FF #FACC15FF"},     #"#3DAE2BFF #00833EFF #00A19BFF #0075A9FF #003764FF"
+                "marker": {"colorPalette": "#FB7185FF #818CF8FF #60A5FAFF #4ADE80FF #FACC15FF"},     #"#3DAE2BFF #00833EFF #00A19BFF #0075A9FF #003764FF"
             },
             "legend": {"width": 150, "backgroundColor": "#FFFDE7"},
             "logo": {"width": "5em"},
