@@ -17,6 +17,12 @@ with open("pickle_df1.pickle", 'rb') as filename:
 연령대정렬 = [60, 50, 40, 30, 20]
 
 
+
+def create_summary_df(df):
+    gdf3 = df.groupby(["기준일자", "회사", "고용형태", "사원유형"])[["임시키"]].count().reset_index()
+    return gdf3
+    
+
 @st.cache_data
 def create_ipyvizzu_gdf(df):
     gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑", "연령", "Level1", "Level2", "겸직임원체크"])[["임시키"]].count().reset_index()
