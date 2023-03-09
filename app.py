@@ -81,13 +81,13 @@ with col02:
 
 
     col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
-    col1.metric("**임원**", f"{임원1} 명", f"{check_zero(임원변동)}")
-    col2.metric("**설계연구직**", f"{설계연구직1} 명", f"{check_zero(설계연구변동)}")
-    col3.metric("**사무기술직**", f"{사무기술직1} 명", f"{check_zero(사무기술변동)}")
-    col4.metric("**전문직A**", f"{전문직A1} 명", f"{check_zero(전문직A변동)}")
-    col5.metric("**사무지원/전문직B**", f"{사무지원전문직B1} 명", f"{check_zero(사무지원전문직B변동)}")
-    col6.metric("**생산직/별정직**", f"{생산별정직1} 명", f"{check_zero(생산별정직변동)}")
-    col7.metric("**총원**", f"{총원1} 명", f"{check_zero(총원변동)}")
+    col1.metric("**:blue[임 원]**", f"{임원1} 명", f"{check_zero(임원변동)}")
+    col2.metric("**:blue[설계연구직]**", f"{설계연구직1} 명", f"{check_zero(설계연구변동)}")
+    col3.metric("**:blue[사무기술직]**", f"{사무기술직1} 명", f"{check_zero(사무기술변동)}")
+    col4.metric("**:blue[전문직A]**", f"{전문직A1} 명", f"{check_zero(전문직A변동)}")
+    col5.metric("**:blue[사무지원/전문직B]**", f"{사무지원전문직B1} 명", f"{check_zero(사무지원전문직B변동)}")
+    col6.metric("**:blue[생산/별정직]**", f"{생산별정직1} 명", f"{check_zero(생산별정직변동)}")
+    col7.metric("**:blue[총 원]**", f"{총원1} 명", f"{check_zero(총원변동)}")
     
 st.markdown("---")
 
