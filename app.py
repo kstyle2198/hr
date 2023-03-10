@@ -68,7 +68,7 @@ with col02:
     사무지원전문직B2 = gdf4.loc[(gdf4["회사"].isin(select001))&(gdf4["기준일자"]==select003)&(gdf4["사원유형"]=="사무지원/전문직B")]["임시키"].sum()
     생산직2 = gdf4.loc[(gdf4["회사"].isin(select001))&(gdf4["기준일자"]==select003)&(gdf4["사원유형"]=="생산기술직")]["임시키"].sum()
     별정직2 = gdf4.loc[(gdf4["회사"].isin(select001))&(gdf4["기준일자"]==select003)&(gdf4["사원유형"]=="별정직")]["임시키"].sum()
-    생산별정직2 = int(생산직1) + int(별정직1)
+    생산별정직2 = int(생산직2) + int(별정직2)
     총원2 = gdf4.loc[(gdf4["회사"].isin(select001))&(gdf4["기준일자"]==select003)]["임시키"].sum()
     
     임원변동 = 임원1 - 임원2
