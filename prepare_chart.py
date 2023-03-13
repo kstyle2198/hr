@@ -364,5 +364,72 @@ def vz_racing_chart1(df, 회사, dura):
     return chart._repr_html_()
 
 
+#####################################################################################################################
+
+def chart1(기준일자들, df):
+    기준일자들 = 기준일자들
+
+#     t_df = df[df["기준일자"].isin(기준일자들)]
+    gdf = df.groupby(["기준일자","사원유형"])[["임시키"]].count().reset_index()
+    fig = px.bar(gdf, x="기준일자", y="임시키", color="사원유형", barmode="relative",opacity=0.6, text_auto=True, category_orders= {'임시키': ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]})
+    fig.update_layout(legend_traceorder="reversed", width=1400, height=500)
+    return fig
 
 
+@st.cache_data
+def vz_인력운영계획(df):
+    data1 = Data()
+    data1.add_data_frame(df)
+    my_style = vz_style()
+    # story1 = Story(data = data1)
+    story1 = Story(data = data1, style = my_style)
+    title = "설계연구직/사무기술직 인력운영 계획"
+
+    slide1 = Slide(
+        Step(
+            Config({"x": ["기준일자"], "y": ["회사","인원"], "label":"인원","color":"회사",
+                    "title": title,
+                "geometry": "rectangle",}),
+        )
+    )
+    story1.add_slide(slide1)
+
+    slide1 = Slide(
+        Step(
+            Config({"x": ["기준일자"], "y": ["회사","인원"], "label":"인원","color":"회사",
+                    "title": title,
+                "geometry": "area",}),
+        )
+    )
+    story1.add_slide(slide1)
+
+
+    slide1 = Slide(
+        Step(
+            Config({"x": ["기준일자"], "y": ["회사","인원"], "label":"인원","color":"회사",
+                    "title": title,
+                "geometry": "area",
+                    "split": True,}),)
+    )
+    story1.add_slide(slide1)
+
+    slide1 = Slide(
+        Step(
+            Config({"x": ["회사","기준일자"], "y": ["인원"], "label":"인원","color":"회사",
+                    "title": title,
+                "geometry": "rectangle",}),)
+    )
+    story1.add_slide(slide1)
+    
+    slide1 = Slide(
+        Step(
+            Config({"x": ["회사","기준일자"], "y": ["인원", "사원유형"], "label":"인원","color":["회사","사원유형"],
+                    "title": title,
+                "geometry": "rectangle",}),)
+    )
+    story1.add_slide(slide1)
+
+
+    story1.set_feature("tooltip", True)
+    story1.set_size(width=1500, height=500)
+    story1.play()
