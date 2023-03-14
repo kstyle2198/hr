@@ -221,7 +221,7 @@ def story_of_present():
     with st.expander("✌️ **분기별 조직별 인원변동 현황 (Racing Chart)**"):
         
         st.info("인원 변동 효과를 극적으로 표현하기 위해 ***소수점 변동식***으로 표현되어 있습니다. 실제는 자연수 변동입니다.")
-        col41, col42 = st.columns([2, 1])
+        col41, col42 = st.columns([9, 1])
         with col41:
             col411, col412 = st.columns([1, 1])
             with col411:
@@ -229,12 +229,11 @@ def story_of_present():
             with col412:
                 Speed = st.selectbox('**속도 선택** (숫자가 작을수록 빠름)', [2, 3, 4, 5])
             CHART = vz_racing_chart1(gdf3, 회사선택41, Speed)
-            html(CHART, width=4000, height=500)
+            html(CHART, height=500)
         with col42:
             st.text("공란")
             
     st.markdown("---")
-    st.markdown("end of the page - last updates on Mar 8th")
 ################################################################
 
 대상직급 = ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]
@@ -311,6 +310,19 @@ def story_of_future():
 
 def story_of_test():
     st.markdown("# 테스트 페이지 (공란)")
+    
+    
+    with st.form("my_form"):
+        st.write("Simulation Conditions")
+        slider_val = st.slider("Time Slider")
+        checkbox_val = st.checkbox("Form checkbox")
+
+        # Every form must have a submit button.
+        submitted = st.form_submit_button("Submit")
+        if submitted:
+            st.write("slider", slider_val, "checkbox", checkbox_val)
+
+    st.write("Outside the form")
 
 
 ################################################

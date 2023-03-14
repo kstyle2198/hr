@@ -345,7 +345,7 @@ def vz_racing_chart1(df, 회사, dura):
             }
         )
     
-    chart = Chart(display=DisplayTarget.MANUAL)
+    chart = Chart(display=DisplayTarget.MANUAL, width="70%", height="500px")
     chart.animate(data, style)
     
     for year in range(1, 8):
@@ -383,6 +383,9 @@ def vz_인력운영계획(df):
     my_style = vz_style()
     # story1 = Story(data = data1)
     story1 = Story(data = data1, style = my_style)
+    story1.set_feature("tooltip", True)
+    story1.set_size(width=1500, height=500)
+
     title = "설계연구직/사무기술직 인력운영 계획"
 
     slide1 = Slide(
@@ -430,6 +433,4 @@ def vz_인력운영계획(df):
     story1.add_slide(slide1)
 
 
-    story1.set_feature("tooltip", True)
-    story1.set_size(width=1500, height=500)
     story1.play()
