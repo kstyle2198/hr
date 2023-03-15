@@ -3,8 +3,28 @@ import numpy as np
 import pickle
 import streamlit as st
 import random
+import functools
 
 
+def unpack_df_columns(func):
+    """
+    A general use decorator to unpack a df[subset] of columns
+    into a function which expects the values at those columns
+    as arguments
+    """
+    
+    @functools.wraps(func)
+    def _unpack_df_columns(*args, **kwargs):
+        
+        # args[0] is a pandas series equal in length as the 
+        # df[subset] to which the apply function is applied 
+        series = args[0]
+
+        # series.values holds the number of arguments expected
+        # by func and is os length len(df[subset].columns)
+        return func(*series.values)
+
+    return _unpack_df_columns
 
 
 with open("pickle_df1.pickle", 'rb') as filename:
@@ -90,7 +110,7 @@ def racing_df1(df):
     return gdf2
     
     
-##############################################################################################3
+### Future #############################################################################3
 
 
 회사정렬1 = ['HG', 'HDI', 'HCE']
@@ -105,7 +125,7 @@ def racing_df1(df):
 
 @st.cache_data
 def create_ipyvizzu_gdf1(df):
-    gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑", "연령", "Level1", "Level2"])[["임시키"]].count().reset_index()
+    gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "직급", "성별","그룹핑", "연령", "Level1", "Level2"])[["임시키"]].count().reset_index()
     gdf['기준일자']= pd.Categorical(gdf['기준일자'], categories=기준일자정렬1, ordered=True)
     gdf['회사']= pd.Categorical(gdf['회사'], categories=회사정렬1, ordered=True)
     gdf['고용형태']= pd.Categorical(gdf['고용형태'], categories=고용형태정렬1, ordered=True)
@@ -126,25 +146,31 @@ def create_ipyvizzu_gdf1(df):
 
 
 ###############시뮬레이션 조건#####################
-random_state = 43
-대상회사 = "HG"
-시뮬레이션연도 = 2023
-직급별퇴사율 = [0.05, 0.05, 0.05, 0.05, 0.01]     # HL1, HL2, HL3(1), HL3(2), HL3(3)
-채용인원비율들 = [0.3, 0.3, 0.1, 0.02]   # HL1, HL2, HL3(1), HL3(2)
-직급별승진율 = [0.2, 0.15, 0.15, 0.1]
-남녀선택 = ["남성","남성","여성","남성","남성","여성","남성","남성","여성","남성"]  # 7:3
-채용대상직급 = ["HL1", "HL2", "HL3(1)", "HL3(2)"]
 
 
-def get_뉴승급년차(승급년도):
-    global 시뮬레이션연도
+# def get_뉴승급년차(승급년도):
+#     global 새승급년도
+#     try:
+#         if 승급년도 is None:
+#             return 0
+#         else:
+#             return int(새승급년도) - int(승급년도) + 1
+#     except:
+#         pass
+    
+    
+@unpack_df_columns
+def get_뉴승급년차(기준일자, 승급년도):
     try:
         if 승급년도 is None:
             return 0
         else:
-            return 시뮬레이션연도 - int(승급년도) + 1
+            return int(str(기준일자[1:5])) - int(승급년도) + 1
     except:
         pass
+
+
+
     
 # 해 넘어가는 함수 (연령 +1)
 def get_새해연령(age):
@@ -154,9 +180,9 @@ def get_새해연령(age):
 def add_age_range(age):
     return int(np.floor(age/10)*10)
 
-def 사무설계연구퇴직(df1, 기준일자):
-    global random_state
-    global 직급별퇴사율
+def 사무설계연구퇴직(df1, 기준일자, 직급별퇴사율, random_state):
+    random_state =random_state
+    직급별퇴사율 = 직급별퇴사율
     # 타겟 df 잡기
     target_df1 = df1.copy()
 #     print(f"퇴사전 총원 : {len(target_df1.index)}")
@@ -212,10 +238,12 @@ def 사무설계연구퇴직(df1, 기준일자):
     return target_df1   
 
 
-def 사무설계연구채용(df1, 회사, 채용시점):
-    global random_state
-    global 채용인원비율들
-    global 채용대상직급
+def 사무설계연구채용(df1, 회사, 채용시점, random_state, 채용인원비율들, 채용대상직급, 남녀선택):
+    random_state = random_state
+    채용인원비율들 = 채용인원비율들
+    채용대상직급 = 채용대상직급
+    남녀선택 = 남녀선택
+    
     채용_df = df1.copy()
     사원유형가방 = ["사무기술직", "설계연구직", "사무기술직", "설계연구직", "설계연구직"]
 
@@ -245,7 +273,7 @@ def 사무설계연구채용(df1, 회사, 채용시점):
             '승급년도': [random.choice(승급년도범위) for 인원 in range(int(채용인원))],
             '성별': [random.choice(남녀선택) for 인원 in range(int(채용인원))]}
         t_df = pd.DataFrame.from_dict(data)
-        t_df["승급년차"] = t_df["승급년도"].apply(get_뉴승급년차)
+        t_df["승급년차"] = t_df[["기준일자","승급년도"]].apply(get_뉴승급년차, axis=1)
         t_df["연령대"] =  t_df["연령"].apply(add_age_range)
         t_df["Level1"] =  t_df["그룹핑"].str.split("_").str[0]
         t_df["Level2"] =  t_df["그룹핑"].str.split("_").str[1]
@@ -259,28 +287,28 @@ def 사무설계연구채용(df1, 회사, 채용시점):
 
     return recruit_df
 
-def 사무설계연구승급(df1, 승급기준일):
-    global 직급별승진율
+def 사무설계연구승급(df1, 승급기준일, 직급별승진율):
+    직급별승진율 = 직급별승진율
 
     target_df3 = df1.copy()
     
     승급기준일 = 승급기준일    # 예시 "t20230101"
-    새승급년도 = 승급기준일[1:5]
-#     print(f"승급기준일: {승급기준일}, 승급년도: {새승급년도}")
+    새승급년도 = int(승급기준일[1:5])
+    print(f"승급기준일: {승급기준일}, 승급년도: {새승급년도}")
 
     
     대리승진대상 = target_df3.loc[(target_df3["직급"] == "HL1")&(target_df3["승급년차"] >= 4)]["임시키"].tolist()
     과장승진대상 = target_df3.loc[(target_df3["직급"] == "HL2")&(target_df3["승급년차"] >= 4)]["임시키"].tolist()
     차장승진대상 = target_df3.loc[(target_df3["직급"] == "HL3(1)")&(target_df3["승급년차"] >= 5)]["임시키"].tolist()
     부장승진대상 = target_df3.loc[(target_df3["직급"] == "HL3(2)")&(target_df3["승급년차"] >= 5)]["임시키"].tolist()
-#     print(f"표준년한 이상 승진대상 - 대리: {len(대리승진대상)} 과장: {len(과장승진대상)}, 차장: {len(차장승진대상)} 부장: {len(부장승진대상)}")
+    print(f"{승급기준일}표준년한 이상 승진대상 - 대리: {len(대리승진대상)} 과장: {len(과장승진대상)}, 차장: {len(차장승진대상)} 부장: {len(부장승진대상)}")
     
     대리승진인원 = np.round(len(대리승진대상) * float(직급별승진율[0]))
     과장승진인원 = np.round(len(과장승진대상) * float(직급별승진율[1]))
     차장승진인원 = np.round(len(차장승진대상) * float(직급별승진율[2]))
     부장승진인원 = np.round(len(부장승진대상) * float(직급별승진율[3]))
     
-#     print(f"승진율 적용 승진인원 - 대리: {대리승진인원} 과장: {과장승진인원}, 차장: {차장승진인원} 부장: {부장승진인원}")
+    print(f"{승급기준일}승진율 적용 승진인원 - 대리: {대리승진인원} 과장: {과장승진인원}, 차장: {차장승진인원} 부장: {부장승진인원}")
     
     대리승진자 = [random.choice(대리승진대상) for i in range(int(대리승진인원))]
     과장승진자 = [random.choice(과장승진대상) for i in range(int(과장승진인원))]
@@ -319,7 +347,7 @@ def 사무설계연구승급(df1, 승급기준일):
     target_df3["연령"] = target_df3["연령"].apply(get_새해연령)
     
     target_df3.drop("승급년차", axis=1)
-    target_df3["승급년차"] = target_df3["승급년도"].apply(get_뉴승급년차)
+    target_df3["승급년차"] = target_df3[["기준일자","승급년도"]].apply(get_뉴승급년차, axis=1)
     직급정렬1 = ["HL3(3)","HL3(2)","HL3(1)","HL2","HL1"]
 
     target_df3['직급']= pd.Categorical(target_df3['직급'], categories=직급정렬1, ordered=True)
