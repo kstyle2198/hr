@@ -368,12 +368,16 @@ def story_of_future1():
             gdf7 = create_ipyvizzu_gdf1(total_df)
             vz_인력운영계획(gdf7)
             
-            # print(total_df.loc[(total_df["기준일자"] == "t20260101")&(total_df["직급"].isnull())])
-            # print("="*50)
-            # print(total_df.loc[(total_df["기준일자"] == "t20250401")&(total_df["직급"].isnull())])
-            # print("="*50)
-            # print(total_df.loc[(total_df["기준일자"] == "t20250101")&(total_df["직급"].isnull())])
             
+            # gdf10 = racing_df1(total_df)
+            # col4112, col4122 = st.columns([1, 1])
+            # with col4112:
+            #     회사선택41 = st.selectbox('**회사 선택41**', ['HG', 'HDI', 'HCE'])
+            # with col4122:
+            #     Speed = st.selectbox('**속도 선택** (숫자가 작을수록 빠름)', [2, 3, 4, 5])
+            # CHART = vz_racing_chart1(gdf10, 회사선택41, Speed)
+            # html(CHART, height=500)
+
             # st.plotly_chart(chart1(기준일자들1, total_df), theme="streamlit", use_container_width=True)
             
             st.markdown(f"2023년 인원 변동 : {퇴사입사승급인원_2023}")
@@ -381,109 +385,6 @@ def story_of_future1():
             st.markdown(f"2025년 인원 변동 : {퇴사입사승급인원_2025}")
             
             st.markdown("---")            
-
-
-def story_of_future2():
-    
-    global random_state
-    
-    with st.form("sim-conditions2"):
-        st.markdown("#### **🤔 Simulation Conditions(2)**")
-        select2012 =st.selectbox('✅ **회사를 선택해주세요**', ['HG', 'HDI', 'HCE'])
-        select2022 =st.multiselect('👆 **사원유형 (복수 선택 가능)**', ['설계연구직', '사무기술직'], ['설계연구직', '사무기술직'])
-        
-
-        
-        st.markdown("**😥 직급별 퇴사율**")
-        co15012, col5022, col5032, col5042, col5052 = st.columns([1, 1, 1, 1, 1])
-        with co15012:
-            사원퇴사율 = st.selectbox(":green[HL1 퇴사율]", [0.05, 0.10, 0.08, 0.04, 0.03])
-        with col5022:
-            대리퇴사율 = st.selectbox(":green[HL2 퇴사율]", [0.05, 0.10, 0.08, 0.04, 0.03])
-        with col5032:
-            과장퇴사율 = st.selectbox(":green[HL3(1) 퇴사율]", [0.04, 0.08, 0.04, 0.03])
-        with col5042:
-            차장퇴사율 = st.selectbox(":green[HL3(2) 퇴사율]", [0.03, 0.04, 0.02, 0.01])
-        with col5052:
-            부장퇴사율 = st.selectbox(":green[HL3(3) 퇴사율]", [0.01, 0.03])   
-        직급별퇴사율 = [사원퇴사율, 대리퇴사율, 과장퇴사율, 차장퇴사율, 부장퇴사율]
-
-        st.markdown("**❤️ 직급별 채용율**")
-        co16012, col6022, col6032, col6042 = st.columns([1, 1, 1, 1])
-        with co16012:
-            사원채용율 = st.selectbox(":green[HL1 채용율]", [0.3, 0.2, 0.1, 0.05])
-        with col6022:
-            대리채용율 = st.selectbox(":green[HL2 채용율]", [0.3, 0.2, 0.1, 0.05])
-        with col6032:
-            과장채용율 = st.selectbox(":green[HL3(1) 채용율]", [0.2, 0.1, 0.08, 0.05])
-        with col6042:
-            차장채용율 = st.selectbox(":green[HL3(2) 채용율]", [0.1, 0.08, 0.05, 0.03])
-        채용인원비율들 = [사원채용율, 대리채용율, 과장채용율, 차장채용율]
-        
-        st.markdown("**🐬 직급별 승진율**")
-        co16012, col6022, col6032, col6042 = st.columns([1, 1, 1, 1])
-        with co16012:
-            대리승진율 = st.selectbox(":green[HL2 승진율]", [0.7, 0.5, 0.3])
-        with col6022:
-            과장승진율 = st.selectbox(":green[HL3(1) 승진율]", [0.4, 0.3, 0.1])
-        with col6032:
-            차장승진율 = st.selectbox(":green[HL3(2) 승진율]", [0.2, 0.1, 0.08, 0.05])
-        with col6042:
-            부장승진율 = st.selectbox(":green[HL3(3) 승진율]", [0.1, 0.08, 0.05, 0.03])
-        직급별승진율 = [대리승진율, 과장승진율, 차장승진율, 부장승진율]        
-        
-        st.markdown("---")
-
-        # 2023년 시뮬레이션
-        simul12 = 사무설계연구시뮬(df, select2012, "t20230101", "t20230401", "t20230801", "t20240101", random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율)
-        df1002 = simul12[0]
-        퇴사입사승급인원_2023_2 = simul12[1]
-        
-        # 2024년 시뮬레이션
-        simul22 = 사무설계연구시뮬(df1002, select2012, "t20240101", "t20240401", "t20240801", "t20250101", random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율)
-        df1012 = simul22[0]
-        퇴사입사승급인원_2024_2 = simul22[1]
-        # 2025년 시뮬레이션
-        simul32 = 사무설계연구시뮬(df1012, select2012, "t20250101", "t20250401", "t20250801", "t20260101", random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율)
-        df1022 = simul32[0]
-        퇴사입사승급인원_2025_2 = simul32[1]
-
-        total_df = df1022
-        기준일자들 = total_df.기준일자.unique().tolist()
-        
-        start, end = st.select_slider(
-            '**📅 Select Simulation Period**',
-            options=기준일자들,
-            value=('t20230101', 기준일자들[-1]))
-                
-        기준일자들1 = 기준일자들[기준일자들.index(start):기준일자들.index(end)+1]
-        # st.write(기준일자들1)
-    
-        submitted2 = st.form_submit_button("**✔️ Submit2**")
-
-        
-        
-        if submitted2:
-            total_df = total_df.loc[(total_df["회사"] == select2012)&(total_df["사원유형"].isin(select2022))&(total_df["기준일자"].isin(기준일자들1))]
-            gdf7 = create_ipyvizzu_gdf1(total_df)
-            vz_인력운영계획(gdf7)
-            
-            # print(total_df.loc[(total_df["기준일자"] == "t20260101")&(total_df["직급"].isnull())])
-            # print("="*50)
-            # print(total_df.loc[(total_df["기준일자"] == "t20250401")&(total_df["직급"].isnull())])
-            # print("="*50)
-            # print(total_df.loc[(total_df["기준일자"] == "t20250101")&(total_df["직급"].isnull())])
-            
-            # st.plotly_chart(chart1(기준일자들1, total_df), theme="streamlit", use_container_width=True)
-            
-            st.markdown(f"2023년 인원 변동 : {퇴사입사승급인원_2023_2}")
-            st.markdown(f"2024년 인원 변동 : {퇴사입사승급인원_2024_2}")
-            st.markdown(f"2025년 인원 변동 : {퇴사입사승급인원_2025_2}")
-            
-            st.markdown("---")            
-
-
-st.markdown("---")
 
 
 ########################################################
