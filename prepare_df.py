@@ -125,6 +125,7 @@ def racing_df1(df):
 
 @st.cache_data
 def create_ipyvizzu_gdf1(df):
+    df = df[df["직급"].isin(직급정렬1)]
     gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "직급", "성별","그룹핑", "연령", "Level1", "Level2"])[["임시키"]].count().reset_index()
     gdf['기준일자']= pd.Categorical(gdf['기준일자'], categories=기준일자정렬1, ordered=True)
     gdf['회사']= pd.Categorical(gdf['회사'], categories=회사정렬1, ordered=True)
@@ -148,17 +149,7 @@ def create_ipyvizzu_gdf1(df):
 ###############시뮬레이션 조건#####################
 
 
-# def get_뉴승급년차(승급년도):
-#     global 새승급년도
-#     try:
-#         if 승급년도 is None:
-#             return 0
-#         else:
-#             return int(새승급년도) - int(승급년도) + 1
-#     except:
-#         pass
-    
-    
+   
 @unpack_df_columns
 def get_뉴승급년차(기준일자, 승급년도):
     try:
@@ -169,8 +160,6 @@ def get_뉴승급년차(기준일자, 승급년도):
     except:
         pass
 
-
-
     
 # 해 넘어가는 함수 (연령 +1)
 def get_새해연령(age):
@@ -180,28 +169,32 @@ def get_새해연령(age):
 def add_age_range(age):
     return int(np.floor(age/10)*10)
 
-def 사무설계연구퇴직(df1, 기준일자, 직급별퇴사율, random_state):
+@st.cache_data
+def 사무설계연구퇴직(tdf, 기준일자, 직급별퇴사율, random_state):
     random_state =random_state
     직급별퇴사율 = 직급별퇴사율
     # 타겟 df 잡기
-    target_df1 = df1.copy()
+    tdf = tdf[tdf["직급"] != "HS"]
+    target_df1 = tdf.copy()
 #     print(f"퇴사전 총원 : {len(target_df1.index)}")
 
     
     # 정년퇴직자 날리기
-    print(f"정년퇴직: {len(target_df1[target_df1['연령'] == 60])}")
+    정년퇴직인원 = len(target_df1[target_df1['연령'] == 60])
+    print(f"정년퇴직: {정년퇴직인원}")
+
     target_df1 = target_df1[target_df1["연령"] != 60]
     
     # 퇴사율 가정에 다른 직급별 퇴사인원
-    사원퇴사인원 = int(np.round(len(target_df1.loc[(target_df1["직급"]=="HL1")].index) *직급별퇴사율[0],0))
-    대리퇴사인원 = int(np.round(len(target_df1.loc[(target_df1["직급"]=="HL2")].index) * 직급별퇴사율[1],0))
-    과장퇴사인원 = int(np.round(len(target_df1.loc[(target_df1["직급"]=="HL3(1)")].index) * 직급별퇴사율[2],0))
-    차장퇴사인원 = int(np.round(len(target_df1.loc[(target_df1["직급"]=="HL3(2)")].index) * 직급별퇴사율[3],0))
+    사원퇴사인원 = int(np.round(len(target_df1[(target_df1["직급"]=="HL1")].index) *직급별퇴사율[0],0))
+    대리퇴사인원 = int(np.round(len(target_df1[(target_df1["직급"]=="HL2")].index) * 직급별퇴사율[1],0))
+    과장퇴사인원 = int(np.round(len(target_df1[(target_df1["직급"]=="HL3(1)")].index) * 직급별퇴사율[2],0))
+    차장퇴사인원 = int(np.round(len(target_df1[(target_df1["직급"]=="HL3(2)")].index) * 직급별퇴사율[3],0))
     부장퇴사인원 = int(np.round(len(target_df1[target_df1["직급"]=="HL3(3)"].index) * 직급별퇴사율[4],0))
 #     print(f"퇴사인원 - 사원:{사원퇴사인원}, 대리:{대리퇴사인원}, 과장퇴사:{과장퇴사인원}, 차장퇴사:{차장퇴사인원}, 부장퇴사:{부장퇴사인원}")
-    
+    퇴사리스트 = [정년퇴직인원, 사원퇴사인원, 대리퇴사인원, 과장퇴사인원, 차장퇴사인원, 부장퇴사인원]
     # 실제 퇴사인원 index 랜덤으로 잡아내기
-    사원퇴사자 = target_df1.loc[(target_df1['직급']=='HL1')|(target_df1['직급']=='HS')].sample(n=사원퇴사인원, random_state=random_state)
+    사원퇴사자 = target_df1.loc[(target_df1['직급']=='HL1')].sample(n=사원퇴사인원, random_state=random_state)
     대리퇴사자 = target_df1.loc[(target_df1['직급']=='HL2')].sample(n=대리퇴사인원, random_state=random_state)
     과장퇴사자 = target_df1.loc[(target_df1["직급"]=="HL3(1)")].sample(n=과장퇴사인원, random_state=random_state)
     차장퇴사자 = target_df1.loc[(target_df1["직급"]=="HL3(2)")].sample(n=차장퇴사인원, random_state=random_state)
@@ -235,16 +228,16 @@ def 사무설계연구퇴직(df1, 기준일자, 직급별퇴사율, random_state
     target_df1 = target_df1.drop(drop_index)
 #     print(f"퇴사후 총원 : {len(target_df1.index)}")
     
-    return target_df1   
+    return target_df1, 퇴사리스트  
 
-
+@st.cache_data
 def 사무설계연구채용(df1, 회사, 채용시점, random_state, 채용인원비율들, 채용대상직급, 남녀선택):
     random_state = random_state
     채용인원비율들 = 채용인원비율들
     채용대상직급 = 채용대상직급
     남녀선택 = 남녀선택
     
-    채용_df = df1.copy()
+    채용_df = df1[df1["직급"] != "HS"].copy()
     사원유형가방 = ["사무기술직", "설계연구직", "사무기술직", "설계연구직", "설계연구직"]
 
 
@@ -253,7 +246,8 @@ def 사무설계연구채용(df1, 회사, 채용시점, random_state, 채용인�
     for 직급, 채용인원비율 in zip(채용대상직급, 채용인원비율들):
     
         연령범위 = 채용_df[채용_df["직급"] == 직급]["연령"].quantile([.0, .5]).values.tolist()
-#         print(f"연령범위 quantile([.0, .5]) : {연령범위}")
+        연령범위 = [연령범위[0], 연령범위[1]+1]
+        # print(f"연령범위 quantile([.0, .5]) : {연령범위}")
         승급년도범위 = 채용_df[채용_df["직급"] == 직급]["승급년도"].value_counts()[:3].index.tolist()
 #         print(f"승급년도범위 value_counts()[:3] : {승급년도범위}")
         그룹핑범위 = 채용_df[채용_df["직급"] == 직급]["그룹핑"].tolist()
@@ -265,13 +259,13 @@ def 사무설계연구채용(df1, 회사, 채용시점, random_state, 채용인�
             '기준일자': [채용시점 for 인원 in range(int(채용인원))],
             '회사': [회사 for 인원 in range(int(채용인원))],
             '고용형태': ["직원"for 인원 in range(int(채용인원))],
-            '사원유형': [random.choice(사원유형가방) for 인원 in range(int(채용인원))],
+            '사원유형': [np.random.choice(사원유형가방) for 인원 in range(int(채용인원))],
             '직급': [직급 for 인원 in range(int(채용인원))],
             '성명': ["홍길동" for 인원 in range(int(채용인원))],
             '연령': [np.random.randint(연령범위[0], 연령범위[1]) for 인원 in range(int(채용인원))],
-            '그룹핑': [random.choice(그룹핑범위) for 인원 in range(int(채용인원))],
-            '승급년도': [random.choice(승급년도범위) for 인원 in range(int(채용인원))],
-            '성별': [random.choice(남녀선택) for 인원 in range(int(채용인원))]}
+            '그룹핑': [np.random.choice(그룹핑범위) for 인원 in range(int(채용인원))],
+            '승급년도': [np.random.choice(승급년도범위) for 인원 in range(int(채용인원))],
+            '성별': [np.random.choice(남녀선택) for 인원 in range(int(채용인원))]}
         t_df = pd.DataFrame.from_dict(data)
         t_df["승급년차"] = t_df[["기준일자","승급년도"]].apply(get_뉴승급년차, axis=1)
         t_df["연령대"] =  t_df["연령"].apply(add_age_range)
@@ -279,41 +273,47 @@ def 사무설계연구채용(df1, 회사, 채용시점, random_state, 채용인�
         t_df["Level2"] =  t_df["그룹핑"].str.split("_").str[1]
         
         mother_df = pd.concat([mother_df, t_df], axis=0)
-    print(f"채용인원: {len(mother_df['기준일자'])}")
+    # print(f"채용인원: {len(mother_df['기준일자'])}")
+    # print(f"채용인원상세1: {mother_df['직급'].value_counts().sort_index()}")
+    # print(f"채용인원상세2: {mother_df['직급'].value_counts().sort_index().tolist()}")
+    직급별채용인원 = mother_df['직급'].value_counts().sort_index().tolist()
     recruit_df = pd.concat([채용_df, mother_df], axis=0)
     recruit_df.drop(columns = "기준일자")
     recruit_df["기준일자"] = 채용시점
 #     print(f"채용후 shape : {recruit_df.shape}")
 
-    return recruit_df
+    return recruit_df, 직급별채용인원
 
+@st.cache_data
 def 사무설계연구승급(df1, 승급기준일, 직급별승진율):
     직급별승진율 = 직급별승진율
 
-    target_df3 = df1.copy()
+    target_df3 = df1[df1["직급"] != "HS"].copy()
     
     승급기준일 = 승급기준일    # 예시 "t20230101"
     새승급년도 = int(승급기준일[1:5])
-    print(f"승급기준일: {승급기준일}, 승급년도: {새승급년도}")
+    # print(f"승급기준일: {승급기준일}, 승급년도: {새승급년도}")
 
     
     대리승진대상 = target_df3.loc[(target_df3["직급"] == "HL1")&(target_df3["승급년차"] >= 4)]["임시키"].tolist()
     과장승진대상 = target_df3.loc[(target_df3["직급"] == "HL2")&(target_df3["승급년차"] >= 4)]["임시키"].tolist()
     차장승진대상 = target_df3.loc[(target_df3["직급"] == "HL3(1)")&(target_df3["승급년차"] >= 5)]["임시키"].tolist()
     부장승진대상 = target_df3.loc[(target_df3["직급"] == "HL3(2)")&(target_df3["승급년차"] >= 5)]["임시키"].tolist()
-    print(f"{승급기준일}표준년한 이상 승진대상 - 대리: {len(대리승진대상)} 과장: {len(과장승진대상)}, 차장: {len(차장승진대상)} 부장: {len(부장승진대상)}")
+    print(f"{승급기준일} 표준년한 이상 승진대상 - 대리: {len(대리승진대상)} 과장: {len(과장승진대상)}, 차장: {len(차장승진대상)} 부장: {len(부장승진대상)}")
     
     대리승진인원 = np.round(len(대리승진대상) * float(직급별승진율[0]))
     과장승진인원 = np.round(len(과장승진대상) * float(직급별승진율[1]))
     차장승진인원 = np.round(len(차장승진대상) * float(직급별승진율[2]))
     부장승진인원 = np.round(len(부장승진대상) * float(직급별승진율[3]))
     
-    print(f"{승급기준일}승진율 적용 승진인원 - 대리: {대리승진인원} 과장: {과장승진인원}, 차장: {차장승진인원} 부장: {부장승진인원}")
+    승급자리스트 = [int(대리승진인원), int(과장승진인원), int(차장승진인원), int(부장승진인원)]
     
-    대리승진자 = [random.choice(대리승진대상) for i in range(int(대리승진인원))]
-    과장승진자 = [random.choice(과장승진대상) for i in range(int(과장승진인원))]
-    차장승진자 = [random.choice(차장승진대상) for i in range(int(차장승진인원))]
-    부장승진자 = [random.choice(부장승진대상) for i in range(int(부장승진인원))]
+    print(f"{승급기준일} 승진율 적용 승진인원 - 대리: {대리승진인원} 과장: {과장승진인원}, 차장: {차장승진인원} 부장: {부장승진인원}")
+    
+    대리승진자 = [np.random.choice(대리승진대상) for i in range(int(대리승진인원))]
+    과장승진자 = [np.random.choice(과장승진대상) for i in range(int(과장승진인원))]
+    차장승진자 = [np.random.choice(차장승진대상) for i in range(int(차장승진인원))]
+    부장승진자 = [np.random.choice(부장승진대상) for i in range(int(부장승진인원))]
     
     승진자임시키 = []
     승진자임시키.extend(대리승진자)
@@ -345,24 +345,16 @@ def 사무설계연구승급(df1, 승급기준일, 직급별승진율):
     target_df3["기준일자"] = 승급기준일
     
     target_df3["연령"] = target_df3["연령"].apply(get_새해연령)
-    
+    target_df3["연령대"] = target_df3["연령"].apply(add_age_range)
+
     target_df3.drop("승급년차", axis=1)
     target_df3["승급년차"] = target_df3[["기준일자","승급년도"]].apply(get_뉴승급년차, axis=1)
     직급정렬1 = ["HL3(3)","HL3(2)","HL3(1)","HL2","HL1"]
 
     target_df3['직급']= pd.Categorical(target_df3['직급'], categories=직급정렬1, ordered=True)
     target_df3.sort_values(by=["기준일자","직급","사원유형","고용형태","회사"], inplace=True)
-    return target_df3
+    return target_df3, 승급자리스트
     
-
-
-
-
-
-
-
-
-
 
 
 ############################################################################################  

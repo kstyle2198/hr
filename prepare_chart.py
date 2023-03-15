@@ -365,7 +365,7 @@ def vz_racing_chart1(df, 회사, dura):
 
 
 #####################################################################################################################
-
+@st.cache_data
 def chart1(기준일자들, df):
     기준일자들 = 기준일자들
 
@@ -382,8 +382,8 @@ def vz_인력운영계획(df):
     data1 = Data()
     data1.add_data_frame(df)
     my_style = vz_style()
-    # story1 = Story(data = data1)
-    story1 = Story(data = data1, style = my_style)
+    story1 = Story(data = data1)
+    # story1 = Story(data = data1, style = my_style)
     story1.set_feature("tooltip", True)
     story1.set_size(width=1500, height=500)
 
