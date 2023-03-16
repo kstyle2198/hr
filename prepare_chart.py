@@ -219,8 +219,6 @@ def vz_회사별임원변동_겸직은_제뉴인(df):
     story1.set_size(width=800, height=500)
     story1.play()
     
-    
-    
 @st.cache_data
 def 사무연구직급별펀넬플롯(df):
     y = df.직급.tolist()
@@ -254,18 +252,6 @@ def 성별구조(df):
     fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
     return fig
     
-    
-    
-    
-    # total_df = df
-    # total_gdf = total_df.groupby(['기준일자','직급','성별'])[["인원"]].sum().reset_index().round()
-    # fig = px.funnel(df, x=x, y=y, facet_col=기준일자, facet_col_wrap=0, color = 사원유형, hover_name = y, opacity=0.7, 
-    #                 category_orders= {'y': ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]})  #text = portions, 
-    # # total_gdf.rename(columns={'임시키':'인원'}, inplace=True)
-    
-    # # fig = px.bar(total_gdf, x="직급", y=["인원", "성별"], facet_col="기준일자", color="성별", text_auto=True)
-    # fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
-    # return fig
 
 @st.cache_data
 def convert_to_order(val):
@@ -373,7 +359,7 @@ def chart1(기준일자들, df):
     gdf = df.groupby(["기준일자","회사"])[["임시키"]].count().reset_index()
     gdf.rename(columns={'임시키':'인원'}, inplace=True)
     fig = px.bar(gdf, x="기준일자", y=["인원"], color="회사", barmode="relative",opacity=0.6, text_auto=True, category_orders= {'인원': ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]})
-    fig.update_layout(legend_traceorder="reversed", width=1400, height=500)
+    fig.update_layout(legend_traceorder="reversed", width=1400, height=400)
     return fig
 
 
@@ -382,10 +368,10 @@ def vz_인력운영계획(df):
     data1 = Data()
     data1.add_data_frame(df)
     my_style = vz_style()
-    story1 = Story(data = data1)
-    # story1 = Story(data = data1, style = my_style)
+    # story1 = Story(data = data1)
+    story1 = Story(data = data1, style = my_style)
     story1.set_feature("tooltip", True)
-    story1.set_size(width=1500, height=500)
+    story1.set_size(width=1500, height=700)
 
     title = "설계연구직/사무기술직 인력운영 계획"
 
@@ -393,122 +379,64 @@ def vz_인력운영계획(df):
         Step(
             Config({"x": ["기준일자"], "y": ["회사","인원"], "label":"인원","color":"회사",
                     "title": title,
-                "geometry": "rectangle",}),
+                    "geometry": "rectangle",}),
         )
     )
     story1.add_slide(slide1)
 
     slide1 = Slide(
         Step(
-            Config({"x": ["기준일자"], "y": ["회사","인원"], "label":"인원","color":"회사",
-                    "title": title,
-                "geometry": "area",}),
+            Config({"x": ["기준일자"], "y": ["사원유형","인원"], "label":"인원","color":"사원유형",
+                    "title": title + " (사원유형별)",
+                    "geometry": "area",
+                    "split": True}),
         )
     )
     story1.add_slide(slide1)
     
     slide1 = Slide(
         Step(
-            Config({"x": ["기준일자"], "y": ["사원유형","인원"], "label":"인원","color":"사원유형",
-                    "title": title,
-                "geometry": "area",}),
-        )
-    )
-    story1.add_slide(slide1)
-    
-    slide1 = Slide(
-        Step(
-            Config({"x": ["기준일자"], "y": ["사원유형","인원"], "label":"인원","color":"사원유형",
-                    "title": title,
-                "geometry": "area",
-                    "split": True,}),)
-    )
-    story1.add_slide(slide1)
-
-
-    slide1 = Slide(
-        Step(
-            Data.filter("record.사원유형 == '설계연구직'"),
-            Config({"x": ["기준일자"], "y": ["사원유형","인원"], "label":"인원","color":"사원유형",
-                    "title": "설계연구직 인력운영 계획",
-                "geometry": "area",
-                    "split": True,}),)
-    )
-    story1.add_slide(slide1)
-    
-    
-    slide1 = Slide(
-        Step(
-            Config({"x": ["기준일자"], "y": ["직급","인원"], "label":"인원","color":"직급",
-                    "title": "설계연구직 인력운영 계획",
-                "geometry": "area",
-                    "split": False,}),)
-    )
-    story1.add_slide(slide1)
-
-    slide1 = Slide(
-        Step(
-            Config({"x": ["기준일자"], "y": ["직급","인원"], "label":"인원","color":"직급",
-                    "title": "설계연구직 인력운영 계획",
-                "geometry": "area",
-                    "split": True,}),)
-    )
-    story1.add_slide(slide1)
-
-    slide1 = Slide(
-        Step(
-            Config({"x": ["기준일자"], "y": ["직급","인원"], "label":"인원","color":"직급",
-                    "title": "설계연구직 인력운영 계획",
-                "geometry": "rectangle",
-                    "split": True,}),)
-    )
-    story1.add_slide(slide1)
-    
-    slide1 = Slide()    
-    slide1.add_step(Step(Data.filter(None)))
-    slide1 = Slide(
-        Step(
-            Data.filter("record.사원유형 == '사무기술직'"),
-            Config({"x": ["기준일자"], "y": ["사원유형","인원"], "label":"인원","color":"사원유형",
-                    "title": "사무기술직 인력운영 계획",
-                "geometry": "area",
+            Config({"x": ["연령대","인원"], "y": ["기준일자"], "label":"인원","color":"연령대",
+                    "title": title + " (연령대별)",
+                    "geometry": "rectangle",
                     "split": True,}),)
     )
     story1.add_slide(slide1)
     
     slide1 = Slide(
         Step(
-            Config({"x": ["기준일자"], "y": ["직급","인원"], "label":"인원","color":"직급",
-                    "title": "사무기술직 인력운영 계획",
-                "geometry": "area",
-                    "split": False,}),)
-    )
-    story1.add_slide(slide1)
-
-    slide1 = Slide(
-        Step(
-            Config({"x": ["기준일자"], "y": ["직급","인원"], "label":"인원","color":"직급",
-                    "title": "사무기술직 인력운영 계획",
-                "geometry": "area",
-                    "split": True,}),)
-    )
-    story1.add_slide(slide1)
-
-    slide1 = Slide(
-        Step(
-            Config({"x": ["기준일자"], "y": ["직급","인원"], "label":"인원","color":"직급",
-                    "title": "사무기술직 인력운영 계획",
-                "geometry": "rectangle",
+            Config({"x": ["직급","인원"], "y": ["기준일자"], "label":["인원", "직급"],"color":"직급",
+                    "title": title + " (직급별)",
+                    "geometry": "rectangle",
                     "split": True,}),)
     )
     story1.add_slide(slide1)
     
-    slide1 = Slide()  
-    slide1.add_step(Step(Data.filter(None)))
-
+    slide1 = Slide(
+        Step(
+            Config({"x": ["성별","직급", "인원"], "y": ["기준일자"], "label":["인원","직급"],"color":"성별",
+                    "title": title + "(성별/직급별)",
+                    "geometry": "rectangle",
+                    "split": True,}),)
+    )
     story1.add_slide(slide1)
 
-  
+    slide1 = Slide(
+        Step(
+            Config({"x": ["인원","Level1"], "y": ["기준일자"], "label":"인원","color":"Level1",
+                    "title": title + " (Level1 조직별)",
+                    "geometry": "rectangle",
+                    "split": True,}),)
+    )
+    story1.add_slide(slide1)
 
+    slide1 = Slide(
+        Step(
+            Config({"x": ["인원","그룹핑"], "y": ["기준일자"], "label":"인원","color":"그룹핑",
+                    "title": title + " (Level1/Level2 조직별)",
+                    "geometry": "rectangle",
+                    "split": True,}),)
+    )
+    story1.add_slide(slide1)
 
     story1.play()

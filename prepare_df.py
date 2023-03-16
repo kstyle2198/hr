@@ -127,12 +127,12 @@ def racing_df1(df):
 @st.cache_data
 def create_ipyvizzu_gdf1(df):
     df = df[df["직급"].isin(직급정렬1)]
-    gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "직급", "성별","그룹핑", "연령", "Level1", "Level2"])[["임시키"]].count().reset_index()
+    gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "직급", "성별","그룹핑", "연령", "연령대", "Level1", "Level2"])[["임시키"]].count().reset_index()
     gdf['기준일자']= pd.Categorical(gdf['기준일자'], categories=기준일자정렬1, ordered=True)
     gdf['회사']= pd.Categorical(gdf['회사'], categories=회사정렬1, ordered=True)
     gdf['고용형태']= pd.Categorical(gdf['고용형태'], categories=고용형태정렬1, ordered=True)
     gdf['사원유형']= pd.Categorical(gdf['사원유형'], categories=사원유형정렬1, ordered=True)
-    # gdf['연령대']= pd.Categorical(gdf['연령대'], categories=연령대정렬, ordered=True)
+    gdf['연령대']= pd.Categorical(gdf['연령대'], categories=연령대정렬, ordered=True)
     # gdf['직급']= pd.Categorical(gdf['직급'], categories=직급정렬, ordered=True)
     gdf.sort_values(by=["기준일자","사원유형","고용형태","회사"], inplace=True)
     gdf["기준일자"] = gdf["기준일자"].astype("str")
@@ -141,7 +141,7 @@ def create_ipyvizzu_gdf1(df):
     gdf["사원유형"] = gdf["사원유형"].astype("str")
     # gdf["직급"] = gdf["직급"].astype("str").sort_values(ascending=True)
     # gdf["승급년차"] = gdf["직급"].astype("str").sort_values(ascending=True)
-    # gdf["연령대"] = gdf["연령대"].astype("str")
+    gdf["연령대"] = gdf["연령대"].astype("str")
     gdf.rename(columns={'임시키':'인원'}, inplace=True)
     return gdf
 

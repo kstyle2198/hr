@@ -236,7 +236,7 @@ def story_of_present():
             
     st.markdown("---")
 ################################################################
-
+################################################################
 
 image1 = Image.open('./images/Data-Science.jpeg')
 
@@ -289,10 +289,24 @@ def story_of_future1():
     
     with st.form("sim-conditions1"):
         st.markdown("#### **🤔 Simulation Conditions(1)**")
-        select201 =st.selectbox('✅ **회사를 선택해주세요**', ['HG', 'HDI', 'HCE'])
-        select202 =st.multiselect('👆 **사원유형 (복수 선택 가능)**', ['설계연구직', '사무기술직'], ['설계연구직', '사무기술직'])
         
-
+        with st.expander("🪧 **시뮬레이션 조건 설명**"):
+            st.info('''
+                    - 본 시뮬레이션은 HL1 ~ HL3(3)까지를 대상으로 하며, 퇴사/입사/승급을 일정 조건에 따라 랜덤하게 시행한 결과를 보여줌 (HS 직급 미포함)
+                    - 랜덤스테이트 동일 숫자를 유지하는 한, 랜덤 추출 결과가 동일하게 유지됨 (숫자를 변경하면 다른 랜덤 추출시행 )
+                    - 퇴사(자) 인원은 직급별로 퇴사율 적용한 인원만큼 해당 직급에서 랜덤 초이스 (정년퇴직인원 반영)
+                    - 입사(자) 인원은 직급별 입사율 적용, 연령은 해당직급 quantile 0 ~0.5 구간에서, 성별은 남녀 7:3 비율 보기중에서, 승급년도는 상위빈도 3개중에서, 그룹핑은 전체 리스트에서 랜덤초이스
+                    - 승급(자) 인원은 직급별 표준년한 도래자에 대해서 직급별 승급율 적용한 인원만큼 랜덤 초이스\n
+                    
+                    ''')
+        
+        col701, col702, col703 = st.columns([1, 1, 1])
+        with col701:
+            select200 = st.text_input("🚀**Random_State를 :red[자연수]로 입력해주세요**", 45)
+        with col702:
+            select201 =st.selectbox('🍅 **회사를 선택해주세요**', ['HG', 'HDI', 'HCE'])
+        with col703:
+            select202 =st.multiselect('👆 **사원유형 (복수 선택 가능)**', ['설계연구직', '사무기술직'], ['설계연구직', '사무기술직'])
         
         st.markdown("**😥 직급별 퇴사율**")
         co1501, col502, col503, col504, col505 = st.columns([1, 1, 1, 1, 1])
@@ -311,11 +325,11 @@ def story_of_future1():
         st.markdown("**❤️ 직급별 채용율**")
         co1601, col602, col603, col604 = st.columns([1, 1, 1, 1])
         with co1601:
-            사원채용율 = st.selectbox(":green[HL1 채용율]", [0.3, 0.2, 0.1, 0.05])
+            사원채용율 = st.selectbox(":green[HL1 채용율]", [0.15, 0.3, 0.2, 0.1, 0.05])
         with col602:
-            대리채용율 = st.selectbox(":green[HL2 채용율]", [0.3, 0.2, 0.1, 0.05])
+            대리채용율 = st.selectbox(":green[HL2 채용율]", [0.15, 0.3, 0.2, 0.1, 0.05])
         with col603:
-            과장채용율 = st.selectbox(":green[HL3(1) 채용율]", [0.2, 0.1, 0.08, 0.05])
+            과장채용율 = st.selectbox(":green[HL3(1) 채용율]", [0.15, 0.3, 0.2,0.1, 0.05])
         with col604:
             차장채용율 = st.selectbox(":green[HL3(2) 채용율]", [0.1, 0.08, 0.05, 0.03])
         채용인원비율들 = [사원채용율, 대리채용율, 과장채용율, 차장채용율]
@@ -323,28 +337,28 @@ def story_of_future1():
         st.markdown("**🐬 직급별 승진율**")
         co1601, col602, col603, col604 = st.columns([1, 1, 1, 1])
         with co1601:
-            대리승진율 = st.selectbox(":green[HL2 승진율]", [0.7, 0.5, 0.3])
+            대리승급율 = st.selectbox(":green[HL2 승급율]", [0.7, 0.6, 0.5])
         with col602:
-            과장승진율 = st.selectbox(":green[HL3(1) 승진율]", [0.4, 0.3, 0.1])
+            과장승급율 = st.selectbox(":green[HL3(1) 승급율]", [0.5, 0.4, 0.3])
         with col603:
-            차장승진율 = st.selectbox(":green[HL3(2) 승진율]", [0.2, 0.1, 0.08, 0.05])
+            차장승급율 = st.selectbox(":green[HL3(2) 승급율]", [0.4, 0.3, 0.2])
         with col604:
-            부장승진율 = st.selectbox(":green[HL3(3) 승진율]", [0.1, 0.08, 0.05, 0.03])
-        직급별승진율 = [대리승진율, 과장승진율, 차장승진율, 부장승진율]        
+            부장승급율 = st.selectbox(":green[HL3(3) 승급율]", [0.3, 0.2, 0.1])
+        직급별승진율 = [대리승급율, 과장승급율, 차장승급율, 부장승급율]        
         
         st.markdown("---")
 
         # 2023년 시뮬레이션
-        simul1 = 사무설계연구시뮬(df, select201, "t20230101", "t20230401", "t20230801", "t20240101", random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율)
+        simul1 = 사무설계연구시뮬(df, select201, "t20230101", "t20230401", "t20230801", "t20240101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
         df100 = simul1[0]
         퇴사입사승급인원_2023 = simul1[1]
         
         # 2024년 시뮬레이션
-        simul2 = 사무설계연구시뮬(df100, select201, "t20240101", "t20240401", "t20240801", "t20250101", random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율)
+        simul2 = 사무설계연구시뮬(df100, select201, "t20240101", "t20240401", "t20240801", "t20250101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
         df101 = simul2[0]
         퇴사입사승급인원_2024 = simul2[1]
         # 2025년 시뮬레이션
-        simul3 = 사무설계연구시뮬(df101, select201, "t20250101", "t20250401", "t20250801", "t20260101", random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율)
+        simul3 = 사무설계연구시뮬(df101, select201, "t20250101", "t20250401", "t20250801", "t20260101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
         df102 = simul3[0]
         퇴사입사승급인원_2025 = simul3[1]
 
@@ -352,7 +366,7 @@ def story_of_future1():
         기준일자들 = total_df.기준일자.unique().tolist()
         
         start, end = st.select_slider(
-            '**📅 Select Simulation Period**',
+            '**📅 Simulation Period**',
             options=기준일자들,
             value=('t20230101', 기준일자들[-1]))
                 
@@ -360,6 +374,7 @@ def story_of_future1():
         # st.write(기준일자들1)
     
         submitted1 = st.form_submit_button("**✔️ Submit1**")
+        
 
         
         
@@ -368,6 +383,7 @@ def story_of_future1():
             gdf7 = create_ipyvizzu_gdf1(total_df)
             vz_인력운영계획(gdf7)
             
+            st.markdown("---")
             
             # gdf10 = racing_df1(total_df)
             # col4112, col4122 = st.columns([1, 1])
@@ -430,7 +446,7 @@ elif sdv1 == "Future":
     st.markdown("### **🌞 :blue[설계연구직/사무기술직] 인력운영 계획**")
     story_of_future1()
     st.markdown("---")
-    # st.image(image1, caption='Data Image')
+    st.image(image1, caption='Data Image', width=1500)
 
 else:
     story_of_test()
