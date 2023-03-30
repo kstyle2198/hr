@@ -159,7 +159,7 @@ def vz_회사별임원변동(df):
     story1.play()
     
 @st.cache_data
-def vz_회사별임원변동_겸직은_제뉴인(df):
+def vz_회사별임원변동_겸직은_HDX(df):
     gdf = df
     gdf = gdf.loc[(gdf["고용형태"] == "임원")&(gdf["겸직임원체크"] == 0)]
     data1 = Data()
@@ -168,7 +168,7 @@ def vz_회사별임원변동_겸직은_제뉴인(df):
     story1 = Story(data = data1, style = my_style)
     # story1 = Story(data = data1)
 
-    title = "임원현황 (겸직임원 제뉴인 카운트)"
+    title = "임원현황 (겸직임원 HDX 카운트)"
 
     slide1 = Slide(
         Step(

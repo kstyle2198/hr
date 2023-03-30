@@ -15,7 +15,7 @@ from PIL import Image
 
 
 st.set_page_config(page_title="HR-DataStory", page_icon="11", layout="wide")
-random_state = 10
+# random_state = 10
 
 ##############################################
 ### Data Zone
@@ -37,11 +37,11 @@ def check_zero(val):
       
 col01, col02 = st.columns([1, 2])
 with col01:
-    st.title(" 📈 :red[HR] :blue[Data] Story")
+    st.title(" 🧭 **:red[HR] :blue[Data] Story**")
 with col02:
     col1001, col1002, col1003 = st.columns(3)
     with col1001:
-        select001 =st.multiselect('🏢 **회사 선택 (복수 선택 가능)**', ['HG', 'HDI', 'HCE', 'HCM'], ['HG'], key="회사0")
+        select001 =st.multiselect('🏢 **회사 선택 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE', 'HCM'], ['HDX'], key="회사0")
     with col1002:
         select002 =st.selectbox('📆 **기준 시점**', ['t20230101', 't20221001', 't20220701', 't20220401', 't20220101'], key="기준일자0")
     with col1003:
@@ -102,13 +102,13 @@ def story_of_present():
     st.subheader(":green[분기별 인원변동 현황]")
     col1, col2, col3, col4  = st.columns([0.7, 0.5, 1.5, 0.7])
     with col1:
-        select1 =st.multiselect('👆 **회사를 선택해주세요 (복수 선택 가능)**', ['HG', 'HDI', 'HCE', 'HCM'], ['HG', 'HDI', 'HCE', 'HCM'])
+        select1 =st.multiselect('👆 **회사를 선택해주세요 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE', 'HCM'], ['HDX', 'HDI', 'HCE', 'HCM'])
     with col2:
         select2 = st.multiselect('🪄 **고용형태 선택**', ['임원', '직원'], ['임원', '직원'])
     with col3:
         select3 = st.multiselect('✏️ **사원유형 선택**', ['정규임원','전문위원','계약임원','사무기술직', '설계연구직', '전문직A', '사무지원/전문직B', '생산기술직', '별정직'], ['정규임원','전문위원','계약임원','사무기술직', '설계연구직', '전문직A', '사무지원/전문직B', '생산기술직', '별정직'])
     with col4:
-        select4 = st.radio('✔️ **겸직 임원 처리 방식 선택**', ['겸직임원 각사별 포함', '겸직임원 제뉴인 소속 처리'])
+        select4 = st.radio('✔️ **겸직 임원 처리 방식 선택**', ['겸직임원 각사 소속', '겸직임원 HDX 소속'])
 
     st.markdown("---")
 
@@ -120,10 +120,10 @@ def story_of_present():
         
     with col2:
         gdf2 = gdf1.loc[(gdf1["회사"].isin(select1))&((gdf1["고용형태"].isin(select2))&(gdf1["사원유형"].isin(select3)))]
-        if select4 == '겸직임원 각사별 포함':
+        if select4 == '겸직임원 각사 소속':
             vz_회사별임원변동(gdf2)
         else: 
-            vz_회사별임원변동_겸직은_제뉴인(gdf2)
+            vz_회사별임원변동_겸직은_HDX(gdf2)
 
     st.markdown("---")
 
@@ -132,7 +132,7 @@ def story_of_present():
         col41, col42 = st.columns([1, 1])
         
         with col41:
-            select5_41 =st.multiselect('**회사 선택1 (복수 선택 가능)**', ['HG', 'HDI', 'HCE'], ['HG'])
+            select5_41 =st.multiselect('**회사 선택1 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE'], ['HDX'])
             
             if len(select5_41) == 0:
                 st.text("회사를 선택해주세요.")
@@ -155,7 +155,7 @@ def story_of_present():
                     st.plotly_chart(성별구조(성별_df1), theme="streamlit", use_container_width=True)
 
         with col42:
-            select5_42 =st.multiselect('**회사 선택2 (복수 선택 가능)**', ['HG', 'HDI', 'HCE'], ['HDI'])
+            select5_42 =st.multiselect('**회사 선택2 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE'], ['HDI'])
             
             if len(select5_42) == 0:
                 st.text("회사를 선택해주세요.")
@@ -186,7 +186,7 @@ def story_of_present():
     with col11:
         col1_1, col1_2, col1_3 = st.columns([1, 1, 1])
         with col1_1:
-            comp1 = st.selectbox('**회사 선택1**', ['HG', 'HDI', 'HCE'])
+            comp1 = st.selectbox('**회사 선택1**', ['HDX', 'HDI', 'HCE'])
         with col1_2:
             t1 = st.selectbox('**기준일자 선택1**', ['t20230101', 't20220101', 't20210801'])
         with col1_3:
@@ -197,7 +197,7 @@ def story_of_present():
     with col22:
         col2_1, col2_2, col2_3 = st.columns([1, 1, 1])
         with col2_1:
-            comp2 = st.selectbox('**회사 선택2**', ['HDI', 'HCE', 'HG'])
+            comp2 = st.selectbox('**회사 선택2**', ['HDI', 'HCE', 'HDX'])
         with col2_2:
             t2 = st.selectbox('**기준일자 선택2**', ['t20230101', 't20220101', 't20210801'])
         with col2_3:
@@ -208,7 +208,7 @@ def story_of_present():
     with col33:
         col3_1, col3_2, col3_3 = st.columns([1, 1, 1])
         with col3_1:
-            comp3 = st.selectbox('**회사 선택3**', ['HCE', 'HDI', 'HG'])
+            comp3 = st.selectbox('**회사 선택3**', ['HCE', 'HDI', 'HDX'])
         with col3_2:
             t3= st.selectbox('**기준일자 선택3**', ['t20230101', 't20220101', 't20210801'])
         with col3_3:
@@ -226,7 +226,7 @@ def story_of_present():
         with col41:
             col411, col412 = st.columns([1, 1])
             with col411:
-                회사선택41 = st.selectbox('**회사 선택41**', ['HG', 'HDI', 'HCE'])
+                회사선택41 = st.selectbox('**회사 선택41**', ['HDX', 'HDI', 'HCE'])
             with col412:
                 Speed = st.selectbox('**속도 선택** (숫자가 작을수록 빠름)', [2, 3, 4, 5])
             CHART = vz_racing_chart1(gdf3, 회사선택41, Speed)
@@ -304,7 +304,7 @@ def story_of_future1():
         with col701:
             select200 = st.text_input("🚀**Random_State를 :red[자연수]로 입력해주세요**", 45)
         with col702:
-            select201 =st.selectbox('🍅 **회사를 선택해주세요**', ['HG', 'HDI', 'HCE'])
+            select201 =st.selectbox('🍅 **회사를 선택해주세요**', ['HDX', 'HDI', 'HCE'])
         with col703:
             select202 =st.multiselect('👆 **사원유형 (복수 선택 가능)**', ['설계연구직', '사무기술직'], ['설계연구직', '사무기술직'])
         
@@ -388,7 +388,7 @@ def story_of_future1():
             # gdf10 = racing_df1(total_df)
             # col4112, col4122 = st.columns([1, 1])
             # with col4112:
-            #     회사선택41 = st.selectbox('**회사 선택41**', ['HG', 'HDI', 'HCE'])
+            #     회사선택41 = st.selectbox('**회사 선택41**', ['HDX', 'HDI', 'HCE'])
             # with col4122:
             #     Speed = st.selectbox('**속도 선택** (숫자가 작을수록 빠름)', [2, 3, 4, 5])
             # CHART = vz_racing_chart1(gdf10, 회사선택41, Speed)
@@ -428,7 +428,7 @@ def story_of_test():
 
 
 with st.sidebar:
-    st.header("**:red[HR] :blue[Data] Story**")
+    st.header("🧭 **:red[HR] :blue[Data] Story**")
     st.markdown("---")
     sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Test"])
     st.markdown("---")
