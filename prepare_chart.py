@@ -239,9 +239,33 @@ def 연령박스플롯(df):
     fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
     return fig
 
+# @st.cache_data
+# def 연령구조펀넬플롯(df):
+#     y = df.직급.tolist()
+#     x = df.임시키.tolist()
+#     기준일자 = df.기준일자.tolist()
+#     연령대 = df.연령대.tolist()
+
+#     fig = px.funnel(df, x=x, y=y, facet_col=기준일자, facet_col_wrap=0, color = 연령대, hover_name = y, opacity=0.9,
+#                 category_orders= {'y': ["S1","S2","S3","HS","HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]}) #text = portions, 
+#     fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
+#     return fig
 
 @st.cache_data
-def 성별구조(df):
+def 연령구조펀넬플롯(df):
+    y = df.연령대.tolist()
+    x = df.임시키.tolist()
+    기준일자 = df.기준일자.tolist()
+    직급 = df.직급.tolist()
+    fig = px.funnel(df, x=x, y=y, facet_col=기준일자, facet_col_wrap=0, color = 직급, hover_name = y, opacity=0.9,
+                category_orders= {'y': ["20대","30대","40대","50대","60대"]}) #text = portions, 
+    fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
+    return fig
+    
+
+
+@st.cache_data
+def 성별구조펀넬플롯(df):
     y = df.직급.tolist()
     x = df.임시키.tolist()
     기준일자 = df.기준일자.tolist()
@@ -251,7 +275,9 @@ def 성별구조(df):
                 category_orders= {'y': ["S1","S2","S3","HS","HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]}) #text = portions, 
     fig.update_layout(legend_traceorder="reversed", width=1500, height=400)
     return fig
-    
+
+
+
 
 @st.cache_data
 def convert_to_order(val):

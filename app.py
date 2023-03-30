@@ -14,7 +14,7 @@ from streamlit.components.v1 import html
 from PIL import Image
 
 
-st.set_page_config(page_title="HR-DataStory", page_icon="11", layout="wide")
+st.set_page_config(page_title="🧭HR-DataStory", page_icon="11", layout="wide")
 # random_state = 10
 
 ##############################################
@@ -38,6 +38,8 @@ def check_zero(val):
 col01, col02 = st.columns([1, 2])
 with col01:
     st.title(" 🧭 **:red[HR] :blue[Data] Story**")
+    st.markdown("---")
+    st.markdown("#####   🔭 ***:orange[Giving you Simple & Interactive Insights]***")
 with col02:
     col1001, col1002, col1003 = st.columns(3)
     with col1001:
@@ -127,7 +129,7 @@ def story_of_present():
 
     st.markdown("---")
 
-    with st.expander("✌️ **사무/설계/연구/전문/사무지원 상세 보기 (직급, 연령, 성별)**"):
+    with st.expander("🐳 **사무/설계/연구/전문/사무지원 상세 보기 - 직급, 연령(대), 성별**"):
         
         col41, col42 = st.columns([1, 1])
         
@@ -137,22 +139,25 @@ def story_of_present():
             if len(select5_41) == 0:
                 st.text("회사를 선택해주세요.")
             else:
-                tab1, tab2, tab3 = st.tabs(["**직급 구조**", "**연령 구조**", "**성별 구조**"])
+                tab1, tab2, tab3, tab4 = st.tabs(["**직급 구조**", "**연령대 구조**", "**연령 분포**", "**성별 구조**"])
                 
                 with tab1:
                     st.markdown("L_직급 구조")
                     직급박스플롯_df = 사무연구직급펀넬플롯_df(select5_41)
                     st.plotly_chart(사무연구직급별펀넬플롯(직급박스플롯_df), theme="streamlit", use_container_width=True)
-                    
                 with tab2:
                     st.markdown("L_연령 구조")
+                    연령대_df = 사무연구연령대펀넬플롯_df(select5_41)
+                    st.plotly_chart(연령구조펀넬플롯(연령대_df), theme="streamlit", use_container_width=True)
+                with tab3:
+                    st.markdown("L_연령 분포")
                     연령대박스플롯_df = 사무연구연령대박스플롯_df(select5_41)
                     st.plotly_chart(연령박스플롯(연령대박스플롯_df), theme="streamlit", use_container_width=True)
 
-                with tab3:
+                with tab4:
                     st.markdown("L_성별 구조")
                     성별_df1 = 사무연구성별_df(select5_41)
-                    st.plotly_chart(성별구조(성별_df1), theme="streamlit", use_container_width=True)
+                    st.plotly_chart(성별구조펀넬플롯(성별_df1), theme="streamlit", use_container_width=True)
 
         with col42:
             select5_42 =st.multiselect('**회사 선택2 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE'], ['HDI'])
@@ -160,22 +165,26 @@ def story_of_present():
             if len(select5_42) == 0:
                 st.text("회사를 선택해주세요.")
             else:
-                tab1, tab2, tab3 = st.tabs(["**직급 구조**", "**연령 구조**", "**성별 구조**"])
+                tab1, tab2, tab3, tab4 = st.tabs(["**직급 구조**", "**연령대 구조**", "**연령 분포**", "**성별 구조**"])
                 
                 with tab1:
                     st.markdown("R_직급 구조")
                     직급박스플롯_df = 사무연구직급펀넬플롯_df(select5_42)
                     st.plotly_chart(사무연구직급별펀넬플롯(직급박스플롯_df), theme="streamlit", use_container_width=True)
-                    
                 with tab2:
                     st.markdown("R_연령 구조")
+                    연령대_df = 사무연구연령대펀넬플롯_df(select5_42)
+                    st.plotly_chart(연령구조펀넬플롯(연령대_df), theme="streamlit", use_container_width=True)
+                    
+                with tab3:
+                    st.markdown("R_연령 분포")
                     연령대박스플롯_df = 사무연구연령대박스플롯_df(select5_42)
                     st.plotly_chart(연령박스플롯(연령대박스플롯_df), theme="streamlit", use_container_width=True)
 
-                with tab3:
+                with tab4:
                     st.markdown("R_성별 구조")
                     성별_df2 = 사무연구성별_df(select5_42)
-                    st.plotly_chart(성별구조(성별_df2), theme="streamlit", use_container_width=True)
+                    st.plotly_chart(성별구조펀넬플롯(성별_df2), theme="streamlit", use_container_width=True)
         
         
     st.markdown("---")
