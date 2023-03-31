@@ -15,7 +15,6 @@ from PIL import Image
 
 
 st.set_page_config(page_title="🧭HR-DataStory", page_icon="11", layout="wide")
-# random_state = 10
 
 ##############################################
 ### Data Zone

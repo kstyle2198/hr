@@ -129,7 +129,7 @@ def racing_df1(df):
 고용형태정렬1 = ['직원']
 사원유형정렬1 = ["사무기술직", "설계연구직"]
 직급정렬1 = ["HL3(3)","HL3(2)","HL3(1)","HL2","HL1"]
-연령대정렬1 = [60, 50, 40, 30, 20]
+연령대정렬1 = ["60대", "50대", "40대", "30대", "20대"]
 
 
 
@@ -141,7 +141,7 @@ def create_ipyvizzu_gdf1(df):
     gdf['회사']= pd.Categorical(gdf['회사'], categories=회사정렬1, ordered=True)
     gdf['고용형태']= pd.Categorical(gdf['고용형태'], categories=고용형태정렬1, ordered=True)
     gdf['사원유형']= pd.Categorical(gdf['사원유형'], categories=사원유형정렬1, ordered=True)
-    gdf['연령대']= pd.Categorical(gdf['연령대'], categories=연령대정렬, ordered=True)
+    gdf['연령대']= pd.Categorical(gdf['연령대'], categories=연령대정렬1, ordered=True)
     # gdf['직급']= pd.Categorical(gdf['직급'], categories=직급정렬, ordered=True)
     gdf.sort_values(by=["기준일자","사원유형","고용형태","회사"], inplace=True)
     gdf["기준일자"] = gdf["기준일자"].astype("str")
@@ -177,7 +177,7 @@ def get_새해연령(age):
 
 # 연령대 함수
 def add_age_range(age):
-    return int(np.floor(age/10)*10)
+    return str(int(np.floor(age/10)*10))+"대"
 
 @st.cache_data
 def 사무설계연구퇴직(tdf, 기준일자, 직급별퇴사율, random_state):
