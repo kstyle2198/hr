@@ -44,9 +44,9 @@ with col02:
     with col1001:
         select001 =st.multiselect('🏢 **회사 선택 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE', 'HCM'], ['HDX'], key="회사0")
     with col1002:
-        select002 =st.selectbox('📆 **기준 시점**', ['t20230101', 't20221001', 't20220701', 't20220401', 't20220101'], key="기준일자0")
+        select002 =st.selectbox('📆 **기준 시점**', ['t20230401', 't20230101', 't20221001', 't20220701', 't20220401', 't20220101'], key="기준일자0")
     with col1003:
-        select003 =st.selectbox('📆 **비교 시점**', ['t20221001', 't20220701', 't20220401', 't20220101'], key="기준일자1")
+        select003 =st.selectbox('📆 **비교 시점**', ['t20230101', 't20221001', 't20220701', 't20220401', 't20220101'], key="기준일자1")
         
         
     임원1 = gdf4.loc[(gdf4["회사"].isin(select001))&(gdf4["기준일자"]==select002)&(gdf4["고용형태"]=="임원")]["임시키"].sum()
@@ -196,7 +196,7 @@ def story_of_present():
         with col1_1:
             comp1 = st.selectbox('**회사 선택1**', ['HDX', 'HDI', 'HCE'])
         with col1_2:
-            t1 = st.selectbox('**기준일자 선택1**', ['t20230101', 't20220101', 't20210801'])
+            t1 = st.selectbox('**기준일자 선택1**', ['t20230401', 't20230101', 't20220101'])
         with col1_3:
             표시_전환1 = st.checkbox('**값/비율 표시 전환1**')
         st.markdown("---")
@@ -207,7 +207,7 @@ def story_of_present():
         with col2_1:
             comp2 = st.selectbox('**회사 선택2**', ['HDI', 'HCE', 'HDX'])
         with col2_2:
-            t2 = st.selectbox('**기준일자 선택2**', ['t20230101', 't20220101', 't20210801'])
+            t2 = st.selectbox('**기준일자 선택2**', ['t20230401', 't20230101', 't20220101'])
         with col2_3:
             표시_전환2 = st.checkbox('**값/비율 표시 전환2**')
         st.markdown("---")
@@ -218,7 +218,7 @@ def story_of_present():
         with col3_1:
             comp3 = st.selectbox('**회사 선택3**', ['HCE', 'HDI', 'HDX'])
         with col3_2:
-            t3= st.selectbox('**기준일자 선택3**', ['t20230101', 't20220101', 't20210801'])
+            t3= st.selectbox('**기준일자 선택3**', ['t20230401', 't20230101', 't20220101'])
         with col3_3:
             표시_전환3 = st.checkbox('**값/비율 표시 전환3**')  
         st.markdown("---")
@@ -414,7 +414,7 @@ def story_of_future1():
 ########################################################
 
 def story_of_test():
-    st.markdown("# 테스트 페이지 (공란)")
+    st.markdown("# 국민연금 데이터 기반 경쟁사 인력변동 현황 (준비중)")
     
     
     with st.form("my_form"):
@@ -438,7 +438,7 @@ def story_of_test():
 with st.sidebar:
     st.header("🧭 **:red[HR] :blue[Data] Story**")
     st.markdown("---")
-    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Test"])
+    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "경쟁사 인력변동(준비중)"])
     st.markdown("---")
     
     st.echo("test1")
@@ -451,7 +451,7 @@ if sdv1 == "Present":
     story_of_present()
     
 elif sdv1 == "Future":
-    st.markdown("### **🌞 :blue[설계연구직/사무기술직] 인력운영 계획**")
+    st.markdown("### **🌞 :blue[설계연구직/사무기술직] 인력운영 계획 (:red[👷‍♂️ 개발중입니다. 🚧])**")
     story_of_future1()
     st.markdown("---")
     st.image(image1, caption='Data Image', width=1500)

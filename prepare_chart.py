@@ -107,7 +107,7 @@ def vz_회사별임원변동(df):
     my_style = vz_style()
     # story1 = Story(data = data1)
     story1 = Story(data = data1, style = my_style)
-    title = "임원현황 (겸직임원 각자 카운트)"
+    title = "임원현황 (겸직임원 각사 카운트)"
 
     slide1 = Slide(
         Step(
@@ -283,6 +283,8 @@ def convert_to_order(val):
         return 't20221001'
     elif val == 7:
         return 't20230101'
+    elif val == 8:
+        return 't20230401'
     else:
         return None
     
@@ -348,7 +350,7 @@ def vz_racing_chart1(df, 회사, dura):
     chart = Chart(display=DisplayTarget.MANUAL, width="70%", height="500px")
     chart.animate(data, style)
     
-    for year in range(1, 8):
+    for year in range(1, 9):
         t1 = convert_to_order(year)
         config["title"] = f"{회사} 인원변동 현황 - {t1}"
         chart.animate(
