@@ -372,7 +372,7 @@ def chart1(기준일자들, df):
     기준일자들 = 기준일자들
 
     t_df = df[df["기준일자"].isin(기준일자들)]
-    gdf = df.groupby(["기준일자","회사"])[["임시키"]].count().reset_index()
+    gdf = t_df.groupby(["기준일자","회사"])[["임시키"]].count().reset_index()
     gdf.rename(columns={'임시키':'인원'}, inplace=True)
     fig = px.bar(gdf, x="기준일자", y=["인원"], color="회사", barmode="relative",opacity=0.6, text_auto=True, category_orders= {'인원': ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]})
     fig.update_layout(legend_traceorder="reversed", width=1400, height=400)
@@ -456,3 +456,23 @@ def vz_인력운영계획(df):
     story1.add_slide(slide1)
 
     story1.play()
+    
+    
+    
+    
+    
+
+def pension_chart1(df, col):
+    tdf = df
+    fig = px.line(tdf,
+        x = "기준일자",
+        y = col,
+        color = "약식명",
+        markers=True,
+        line_shape = 'linear',
+        text = col
+    )
+    fig.update_traces(textposition='top center')
+    
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+

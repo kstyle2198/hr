@@ -30,6 +30,9 @@ def unpack_df_columns(func):
 with open("pickle_df1.pickle", 'rb') as filename:
     df = pickle.load(filename)
 
+with open("pickle_df2.pickle", 'rb') as filename:
+    pension_df = pickle.load(filename)
+
 
 회사정렬 = ['HDX', 'HDI', 'HCE', 'HCM']
 기준일자정렬 = ['t20210801', 't20211001', 't20220101', 't20220401', 't20220701', 't20221001', 't20230101', 't20230401']
