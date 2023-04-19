@@ -414,7 +414,7 @@ def story_of_future1():
 
 ########################################################
 
-def story_of_test():
+def story_of_outside():
     st.markdown("### 주요 경쟁사 인원변동 현황 :green[(국민연금 데이터 기반)]")
     st.write(" 🚀 본 화면에서는 국민연금 데이터 기반 주요 경쟁사 인원 증감 및 인당 평균소득월액(추정)을 조회/비교할 수 있습니다.")
     
@@ -444,7 +444,7 @@ def story_of_test():
         start, end = st.select_slider(
             '**📅 조회 기간**',
             options=연금기준일자들,
-            value=('2022-01', 연금기준일자들[-1]))       
+            value=('2022-03', 연금기준일자들[-1]))       
         연금기준일자들1 = 연금기준일자들[연금기준일자들.index(start):연금기준일자들.index(end)+1]
         
         
@@ -482,7 +482,8 @@ with st.sidebar:
     sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Outside"])
     st.markdown("---")
     
-    st.echo("test1")
+    st.markdown(" 🪃 **:blue[Recent Updates]**")
+    st.markdown("- 국민연금 3월 Data 추가 (23.04.19)")
 
 
 
@@ -498,7 +499,7 @@ elif sdv1 == "Future":
     st.image(image1, caption='Data Image', width=1500)
 
 else:
-    story_of_test()
+    story_of_outside()
     
   
     
