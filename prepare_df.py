@@ -121,6 +121,16 @@ def racing_df1(df):
     gdf2['기준일자'].replace(기준일자정렬, rangeindex1, inplace=True)
     gdf2['기준일자'].reset_index(inplace=False)
     return gdf2
+
+@st.cache_data
+def roughviz_df(df, 회사, 기준일자):
+    기준일자 = 기준일자
+    회사 = 회사
+    df = df.loc[(df["회사"]==회사)&(df["기준일자"]==기준일자)]
+    df.rename(columns={'임시키':'인원'}, inplace=True)
+    gdf = df.groupby(["그룹핑"])["인원"].count().reset_index()
+    gdf = st.dataframe(gdf)
+    return gdf
     
     
 ### Future #############################################################################3

@@ -244,6 +244,14 @@ def story_of_present():
             st.text("공란")
             
     st.markdown("---")
+    회사선택55 = st.selectbox('**회사 선택5**', ['HDX', 'HDI', 'HCE'])
+    기준일자선택55= st.selectbox('**기준일자 선택5**', ['t20230401', 't20230101', 't20220101'])
+    df123 = roughviz_df(df, 회사선택55, 기준일자선택55)
+    df123
+    
+    roughviz_chart(df123)
+    
+    
 ################################################################
 ################################################################
 
@@ -452,7 +460,7 @@ def story_of_outside():
         p_df1 = p_df.loc[(p_df["기준일자"].isin(연금기준일자들1))&(p_df["약식명"].isin(연_회사들))]
         
         요약통계 = p_df1.groupby(['약식명'])[['직원수', '신규취득', '자격상실', '평균소득월액']].mean().round().astype(int).reset_index()
-
+        요약통계 = 요약통계.set_index(keys='약식명')
 
 
         # Every form must have a submit button.

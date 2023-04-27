@@ -9,6 +9,7 @@ import random
 import datetime
 import plotly.figure_factory as ff
 from prepare_df import *
+import roughviz
 
 @st.cache_data
 def vz_style():
@@ -365,6 +366,10 @@ def vz_racing_chart1(df, 회사, dura):
         )
     return chart._repr_html_()
 
+
+def roughviz_chart(df):
+    rough_vz = roughviz.bar(df["그룹핑"], df["인원"], axisRoughness = 0.7, axisStrokeWidth = 0.7, roughness=2.3, highlight="gray")
+    return rough_vz
 
 #####################################################################################################################
 @st.cache_data
