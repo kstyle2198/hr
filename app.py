@@ -249,7 +249,7 @@ def story_of_present():
     df123 = roughviz_df(df, 회사선택55, 기준일자선택55)
     df123
     
-    roughviz_chart(df123)
+    # roughviz_chart(df123)
     
     
 ################################################################
