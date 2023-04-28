@@ -368,6 +368,7 @@ def vz_racing_chart1(df, 회사, dura):
 
 
 def roughviz_chart(df):
+    df = df
     rough_vz = roughviz.bar(df["그룹핑"], df["인원"], axisRoughness = 0.7, axisStrokeWidth = 0.7, roughness=2.3, highlight="gray")
     return rough_vz
 
