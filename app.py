@@ -43,7 +43,7 @@ with col01:
 with col02:
     col1001, col1002, col1003 = st.columns(3)
     with col1001:
-        select001 =st.multiselect('🏢 **회사 선택 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE', 'HCM'], ['HDX'], key="회사0")
+        select001 =st.multiselect('🏢 **회사 선택 (복수 선택 가능)**', ['HDX', 'HDI', 'HCE', 'HCM'], ['HDX', 'HDI', 'HCE'], key="회사0")
     with col1002:
         select002 =st.selectbox('📆 **기준 시점**', ['t20230401', 't20230101', 't20221001', 't20220701', 't20220401', 't20220101'], key="기준일자0")
     with col1003:
