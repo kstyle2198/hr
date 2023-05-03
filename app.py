@@ -534,12 +534,12 @@ def story_of_stock():
     t_df = pd.read_csv('ticker_code.csv')
     company_names = t_df["l_name"]
     today = datetime.now().strftime("%Y-%m-%d")
-    start_date = datetime(2015,1,1)
+    # start_date = datetime(2015,1,1)
     end_date = datetime.now()
     opts = st.multiselect("**Choose Companies** (복수 선택 가능)", (company_names), 
                           ["Hyundai Infracore Co., Ltd.", "Hyundai Construction Equipment Co., Ltd.", "Caterpillar Inc.", "Komatsu Ltd.", "Sany Heavy Industry Co., Ltd",
                            "Doosan Bobcat Inc.", "Hitachi, Ltd.", "AB Volvo"])
-    start_date = st.selectbox("**Select Starting Date**", ("2015-01-01", "2019-01-01","2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01"))
+    start_date = st.selectbox("**Select Starting Date**", ("2015-01-01", "2019-01-01","2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01"), index=5)
 
     tickers = []
     for opt in opts:
