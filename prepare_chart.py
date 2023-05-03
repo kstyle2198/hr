@@ -10,6 +10,8 @@ import datetime
 import plotly.figure_factory as ff
 from prepare_df import *
 import roughviz
+import pydeck as pdk
+
 
 @st.cache_data
 def vz_style():
@@ -481,4 +483,49 @@ def pension_chart1(df, col):
     fig.update_traces(textposition='top center')
     
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+    
 
+
+def location_chart(df, mode='light'):
+    order1= {'기준일자':['t20210801', 't20211001', 't20220101', 't20220401', 't20220701', 't20221001', 't20230101', 't20230401']}
+    px.set_mapbox_access_token(open("mapbox_token.py").read())
+    fig = px.scatter_mapbox(df, lat="lat", lon="lon",  color="근무지", size="로그",
+                            color_continuous_scale=px.colors.sequential, size_max=50, zoom=7,
+                            center = {'lat':36.40, 'lon':128.10}, height=700, mapbox_style=mode,
+                            labels = {'회사': 'company'}, category_orders=order1,
+                            hover_name="근무지", opacity=0.5, hover_data=["기준일자", "인원"], text="회사")
+    st.plotly_chart(fig, use_container_width=True)
+    
+def loca_pydeck_chart(df):
+    
+    st.pydeck_chart(pdk.Deck(
+        height= 800,
+        map_style=None,
+        initial_view_state=pdk.ViewState(
+            latitude=37.40,
+            longitude=128.10,
+            zoom=6,
+            pitch=50,
+            bearing=-20
+        ),
+        layers=[
+
+            pdk.Layer(
+                "ColumnLayer",
+                data=df,
+                get_position=["lon", "lat"],
+                get_elevation="로그",
+                elevation_scale=20000,
+                radius=8000,
+                get_fill_color=["인원 * 10", "인원", "인원 * 2", "인원 * 5", 140],
+                pickable=True,
+                auto_highlight=True,
+            )
+        ],
+        tooltip={
+            'html': '회사: {회사}<br> 사업장: {근무지}<br> 인원: {인원}',
+            'style': {
+                'color': 'white'
+                }
+            }
+    ))

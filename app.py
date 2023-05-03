@@ -12,7 +12,7 @@ from prepare_df import *
 from prepare_chart import *
 from streamlit.components.v1 import html
 from PIL import Image
-
+import pydeck as pdk
 
 st.set_page_config(page_title="🧭HR-DataStory", page_icon="11", layout="wide")
 
@@ -475,22 +475,58 @@ def story_of_outside():
                 st.dataframe(요약통계.style.highlight_max(axis=0))
 
 
+def show_location():
+    st.markdown("### 🗺️ 주요 :blue[사업장별] 인원 현황")
     
+    col801, col802 = st.columns([3,7])
+    with col801:
+        로_회사들 = st.multiselect('🔍 조회할 회사를 선택하세요(복수 선택 가능)',
+                               ['HDX', 'HDI', 'HCE'],
+                               ['HDX', 'HDI', 'HCE'])
+        # 로_회사들
+    with col802:    
+        기준일자들 = df.기준일자.unique().tolist()
+        start, end = st.select_slider(
+            '**📅 조회 시점**',
+            options=기준일자들,
+            value=(기준일자들[0], 기준일자들[-1]))     
+        
+        기준일자들1 = 기준일자들[:기준일자들.index(end)+1]
+        조회시점 = 기준일자들1[-1]
+
+    
+    df9 = location_df(df, 로_회사들, 조회시점)
+    
+    tab801, tab802 = st.tabs(["**유형1**", '**유형2**'])
+    with tab801:
+        
+        col901, col902 = st.columns([7.5, 2.5])
+        with col901:
+            st.markdown(f"조회시점: {조회시점}")
+            loca_pydeck_chart(df9)
+        with col902:
+            st.markdown("요약 현황")
+            st.dataframe(df9[["기준일자", "회사", "근무지", "인원"]].style.highlight_max(axis=0))
+        
+    with tab802:
+        st.markdown(f"조회시점: {조회시점}")
+        location_chart(df9)
+
+
 
 
 
 ################################################
 
 
-
-
 with st.sidebar:
     st.header("🧭 **:red[HR] :blue[Data] Story**")
     st.markdown("---")
-    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Outside"])
+    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Outside", "Location"])
     st.markdown("---")
     
     st.markdown(" 🪃 **:blue[Recent Updates]**")
+    st.markdown("- 사업장별 인원현황 Story 추가 (23.05.02)")
     st.markdown("- 국민연금 3월 Data 추가 (23.04.19)")
 
 
@@ -506,8 +542,13 @@ elif sdv1 == "Future":
     st.markdown("---")
     st.image(image1, caption='Data Image', width=1500)
 
-else:
+elif sdv1 == "Outside":
     story_of_outside()
+    
+
+else:
+    show_location()
+    
     
   
     
