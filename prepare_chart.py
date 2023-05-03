@@ -11,6 +11,7 @@ import plotly.figure_factory as ff
 from prepare_df import *
 import roughviz
 import pydeck as pdk
+import random
 
 
 @st.cache_data
@@ -495,9 +496,11 @@ def location_chart(df, mode='light'):
                             labels = {'회사': 'company'}, category_orders=order1,
                             hover_name="근무지", opacity=0.5, hover_data=["기준일자", "인원"], text="회사")
     st.plotly_chart(fig, use_container_width=True)
-    
+
+
+  
 def loca_pydeck_chart(df):
-    
+       
     st.pydeck_chart(pdk.Deck(
         height= 800,
         map_style=None,
@@ -505,22 +508,45 @@ def loca_pydeck_chart(df):
             latitude=37.40,
             longitude=128.10,
             zoom=6,
-            pitch=50,
-            bearing=-20
+            pitch=60,
+            bearing=20
         ),
         layers=[
-
             pdk.Layer(
                 "ColumnLayer",
-                data=df,
+                data=df[df["회사"]=="HDX"],
                 get_position=["lon", "lat"],
                 get_elevation="로그",
                 elevation_scale=30000,
                 radius=8000,
-                get_fill_color=["인원 * 10", "인원", "인원 * 2", "인원 * 5", 140],
+                get_fill_color=[0, 0, 255],
                 pickable=True,
                 auto_highlight=True,
-                opacity=0.7
+                opacity=0.9
+            ),
+            pdk.Layer(
+                "ColumnLayer",
+                data=df[df["회사"]=="HDI"],
+                get_position=["lon", "lat"],
+                get_elevation="로그",
+                elevation_scale=30000,
+                radius=8000,
+                get_fill_color=[255, 51, 51],
+                pickable=True,
+                auto_highlight=True,
+                opacity=0.9
+            ),
+            pdk.Layer(
+                "ColumnLayer",
+                data=df[df["회사"]=="HCE"],
+                get_position=["lon", "lat"],
+                get_elevation="로그",
+                elevation_scale=30000,
+                radius=8000,
+                get_fill_color=[255, 255, 0],
+                pickable=True,
+                auto_highlight=True,
+                opacity=0.9
             )
         ],
         tooltip={
