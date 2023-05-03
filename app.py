@@ -10,6 +10,7 @@ import plotly.express as px
 import plotly.figure_factory as ff
 from prepare_df import *
 from prepare_chart import *
+from stock_df import *
 from streamlit.components.v1 import html
 from PIL import Image
 import pydeck as pdk
@@ -474,6 +475,7 @@ def story_of_outside():
                 st.markdown("##### **조회대상 **월 평균값** (Highests in Yellow)**")
                 st.dataframe(요약통계.style.highlight_max(axis=0))
 
+################################################################################
 
 def show_location():
     st.markdown("### 🗺️ 주요 :blue[사업장별] 인원 현황")
@@ -519,7 +521,39 @@ def show_location():
     with tab802:
         st.markdown(f"조회시점: {조회시점}")
         location_chart(df9)
+#################################################################################33
 
+def story_of_stock():
+    st.markdown("# 📈:red[Stock Market]")
+    with st.expander("📢 **주요 설명**"):
+        st.info('''
+                - 주요 경쟁사의 주가 현황을 조회할 수 있음 (Yahoo Finance Api 사용)
+            
+                ''')
+
+    t_df = pd.read_csv('ticker_code.csv')
+    company_names = t_df["l_name"]
+    today = datetime.now().strftime("%Y-%m-%d")
+    start_date = datetime(2015,1,1)
+    end_date = datetime.now()
+    opts = st.multiselect("**Choose Companies** (복수 선택 가능)", (company_names), 
+                          ["Hyundai Infracore Co., Ltd.", "Hyundai Construction Equipment Co., Ltd.", "Caterpillar Inc.", "Komatsu Ltd.", "Sany Heavy Industry Co., Ltd",
+                           "Doosan Bobcat Inc.", "Hitachi, Ltd.", "AB Volvo"])
+    start_date = st.selectbox("**Select Starting Date**", ("2015-01-01", "2019-01-01","2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01"))
+
+    tickers = []
+    for opt in opts:
+        tickers.append(get_ticker(opt))
+        
+    col1, col2 = st.columns(2)
+    lst = [col1, col2]
+
+    for ticker in tickers:
+        with lst[int(tickers.index(ticker))%2]:
+            stock_chart(ticker, start_date)    
+        
+    
+    pass
 
 
 
@@ -530,10 +564,11 @@ def show_location():
 with st.sidebar:
     st.header("🧭 **:red[HR] :blue[Data] Story**")
     st.markdown("---")
-    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Outside", "Location"])
+    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Outside", "Location", "Stock Market"])
     st.markdown("---")
     
     st.markdown(" 🪃 **:blue[Recent Updates]**")
+    st.markdown("- Stock Market Story 추가 (23.05.03)")
     st.markdown("- 사업장별 인원현황 Story 추가 (23.05.02)")
     st.markdown("- 국민연금 3월 Data 추가 (23.04.19)")
 
@@ -553,9 +588,11 @@ elif sdv1 == "Future":
 elif sdv1 == "Outside":
     story_of_outside()
     
-
-else:
+elif sdv1 == "Location":
     show_location()
+    
+else:
+    story_of_stock()
     
     
   
