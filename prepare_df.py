@@ -396,6 +396,9 @@ def 사무설계연구승급(df1, 승급기준일, 직급별승진율):
 def log_trans(x):
     return np.log10(x)
 
+def 살짝바꾸기(x):
+    살짝바꾼값 = x + np.random.random(1)/10
+    return 살짝바꾼값[0]
 
 loca = pd.read_excel("./jupyter/location.xlsx")
 
@@ -408,8 +411,11 @@ def location_df(df, companies, 기준일자):
     tdf = tdf[tdf["회사"].isin(companies)]
     tdf = pd.merge(tdf,loca, on=['근무지'], how='left')
     tdf = tdf.groupby(["기준일자","회사","근무지", "위도", "경도"])[["임시키"]].count().reset_index()
-    tdf = tdf.rename(columns = {"임시키": "인원", "위도": "lat", "경도": "lon"})
+    tdf["위도1"] = tdf["위도"].apply(살짝바꾸기)
+    tdf["경도1"] = tdf["경도"].apply(살짝바꾸기)
+    tdf = tdf.rename(columns = {"임시키": "인원", "위도1": "lat", "경도1": "lon"})
     tdf["로그"] = tdf["인원"].apply(log_trans)
+
     return tdf    
     
 
