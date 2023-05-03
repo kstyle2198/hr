@@ -478,6 +478,14 @@ def story_of_outside():
 def show_location():
     st.markdown("### 🗺️ 주요 :blue[사업장별] 인원 현황")
     
+    
+    with st.expander("🪧 **주요 설명**"):
+        st.info('''
+                - 지도상 봉의 높이는 log 적용한 인원 값임 (소수 인원 사업장 표현을 고려함)
+                - 마우스 커서 호버링시, 회사/근무지/인원 확인 가능함
+            
+                ''')
+    
     col801, col802 = st.columns([3,7])
     with col801:
         로_회사들 = st.multiselect('🔍 조회할 회사를 선택하세요(복수 선택 가능)',

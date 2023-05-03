@@ -515,7 +515,7 @@ def loca_pydeck_chart(df):
                 data=df,
                 get_position=["lon", "lat"],
                 get_elevation="로그",
-                elevation_scale=20000,
+                elevation_scale=30000,
                 radius=8000,
                 get_fill_color=["인원 * 10", "인원", "인원 * 2", "인원 * 5", 140],
                 pickable=True,
