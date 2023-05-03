@@ -520,6 +520,7 @@ def loca_pydeck_chart(df):
                 get_fill_color=["인원 * 10", "인원", "인원 * 2", "인원 * 5", 140],
                 pickable=True,
                 auto_highlight=True,
+                opacity=0.5
             )
         ],
         tooltip={
