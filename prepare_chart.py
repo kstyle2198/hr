@@ -466,11 +466,7 @@ def vz_인력운영계획(df):
 
     story1.play()
     
-    
-    
-    
-    
-
+@st.cache_data
 def pension_chart1(df, col):
     tdf = df
     fig = px.line(tdf,
@@ -486,7 +482,7 @@ def pension_chart1(df, col):
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
     
 
-
+@st.cache_data
 def location_chart(df, mode='light'):
     order1= {'기준일자':['t20210801', 't20211001', 't20220101', 't20220401', 't20220701', 't20221001', 't20230101', 't20230401']}
     px.set_mapbox_access_token(open("mapbox_token.py").read())
@@ -498,7 +494,7 @@ def location_chart(df, mode='light'):
     st.plotly_chart(fig, use_container_width=True)
 
 
-  
+@st.cache_data 
 def loca_pydeck_chart(df):
        
     st.pydeck_chart(pdk.Deck(
@@ -509,7 +505,7 @@ def loca_pydeck_chart(df):
             longitude=128.10,
             zoom=6,
             pitch=60,
-            bearing=20
+            bearing=-5
         ),
         layers=[
             pdk.Layer(

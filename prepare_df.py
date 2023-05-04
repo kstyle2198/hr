@@ -402,6 +402,7 @@ def 살짝바꾸기(x):
 
 loca = pd.read_excel("./jupyter/location.xlsx")
 
+@st.cache_data
 def location_df(df, companies, 기준일자):
     global loca
     columns = ['기준일자','회사','임시키','근무지']

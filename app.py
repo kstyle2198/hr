@@ -81,13 +81,13 @@ with col02:
 
 
     col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
-    col1.metric("**:blue[임 원]**", f"{임원1} 명", f"{check_zero(임원변동)}")
-    col2.metric("**:blue[설계연구직]**", f"{설계연구직1} 명", f"{check_zero(설계연구변동)}")
-    col3.metric("**:blue[사무기술직]**", f"{사무기술직1} 명", f"{check_zero(사무기술변동)}")
-    col4.metric("**:blue[전문직A]**", f"{전문직A1} 명", f"{check_zero(전문직A변동)}")
-    col5.metric("**:blue[사무지원/전문직B]**", f"{사무지원전문직B1} 명", f"{check_zero(사무지원전문직B변동)}")
-    col6.metric("**:blue[생산/별정직]**", f"{생산별정직1} 명", f"{check_zero(생산별정직변동)}")
-    col7.metric("**:blue[총 원]**", f"{총원1} 명", f"{check_zero(총원변동)}")
+    col1.metric("**:blue[👨‍💼임 원]**", f"{임원1}", f"{check_zero(임원변동)}")
+    col2.metric("**:blue[👨‍💻설계연구직]**", f"{설계연구직1}", f"{check_zero(설계연구변동)}")
+    col3.metric("**:blue[👩‍💼사무기술직]**", f"{사무기술직1}", f"{check_zero(사무기술변동)}")
+    col4.metric("**:blue[👩‍🔧전문직A]**", f"{전문직A1}", f"{check_zero(전문직A변동)}")
+    col5.metric("**:blue[👩‍💻사무지원/전문직B]**", f"{사무지원전문직B1}", f"{check_zero(사무지원전문직B변동)}")
+    col6.metric("**:blue[👨‍🔧생산/별정직]**", f"{생산별정직1}", f"{check_zero(생산별정직변동)}")
+    col7.metric("**:blue[👨‍👨‍👧‍👧총 원]**", f"{총원1}", f"{check_zero(총원변동)}")
     
 st.markdown("---")
 
@@ -312,9 +312,9 @@ def story_of_future1():
             st.info('''
                     - 본 시뮬레이션은 HL1 ~ HL3(3)까지를 대상으로 하며, 퇴사/입사/승급을 일정 조건에 따라 랜덤하게 시행한 결과를 보여줌 (HS 직급 미포함)
                     - 랜덤스테이트 동일 숫자를 유지하는 한, 랜덤 추출 결과가 동일하게 유지됨 (숫자를 변경하면 다른 랜덤 추출시행 )
-                    - 퇴사(자) 인원은 직급별로 퇴사율 적용한 인원만큼 해당 직급에서 랜덤 초이스 (정년퇴직인원 반영)
-                    - 입사(자) 인원은 직급별 입사율 적용, 연령은 해당직급 quantile 0 ~0.5 구간에서, 성별은 남녀 7:3 비율 보기중에서, 승급년도는 상위빈도 3개중에서, 그룹핑은 전체 리스트에서 랜덤초이스
-                    - 승급(자) 인원은 직급별 표준년한 도래자에 대해서 직급별 승급율 적용한 인원만큼 랜덤 초이스\n
+                    - 퇴사 인원은 직급별로 퇴사율 적용한 인원만큼 해당 직급에서 랜덤 초이스 (정년퇴직인원 반영)
+                    - 입사 인원은 직급별 입사율 적용, 연령은 해당직급 quantile 0 ~0.5 구간에서, 성별은 남녀 7:3 비율 보기중에서, 승급년도는 상위빈도 3개중에서, 그룹핑은 전체 리스트에서 랜덤초이스
+                    - 승급 인원은 직급별 표준년한 도래자에 대해서 직급별 승급율 적용한 인원만큼 랜덤 초이스\n
                     
                     ''')
         
@@ -456,8 +456,6 @@ def story_of_outside():
             value=('2022-03', 연금기준일자들[-1]))       
         연금기준일자들1 = 연금기준일자들[연금기준일자들.index(start):연금기준일자들.index(end)+1]
         
-        
-        
         p_df1 = p_df.loc[(p_df["기준일자"].isin(연금기준일자들1))&(p_df["약식명"].isin(연_회사들))]
         
         요약통계 = p_df1.groupby(['약식명'])[['직원수', '신규취득', '자격상실', '평균소득월액']].mean().round().astype(int).reset_index()
@@ -485,6 +483,7 @@ def show_location():
         st.info('''
                 - 지도상 봉의 높이는 log 적용한 인원 값임 (소수 인원 사업장 표현을 고려함)
                 - 마우스 커서 호버링시, 회사/근무지/인원 확인 가능함
+                - 유형2 지도가 작게 보이는 오류 발생 (원인 확인중 - 조회시점 변경하여 화면 새로고침시 정상 복구되긴함)
             
                 ''')
     
@@ -497,7 +496,7 @@ def show_location():
     with col802:    
         기준일자들 = df.기준일자.unique().tolist()
         start, end = st.select_slider(
-            '**📅 조회 시점**',
+            '**📅 조회 시점** (우측 종료시점을 이동하여 변경 가능)',
             options=기준일자들,
             value=(기준일자들[0], 기준일자들[-1]))     
         
@@ -506,20 +505,21 @@ def show_location():
 
     
     df9 = location_df(df, 로_회사들, 조회시점)
+    df10 = df9.set_index(keys=["기준일자", "회사", "근무지"])
     
-    tab801, tab802 = st.tabs(["**유형1**", '**유형2**'])
+    tab801, tab802 = st.tabs(["**:green[유형1]🪴**", '**:blue[유형2]🪵**'])
     with tab801:
         
         col901, col902 = st.columns([7.5, 2.5])
         with col901:
-            st.markdown(f"조회시점: {조회시점}")
+            st.markdown(f"**🌿 조회시점 : {조회시점}**")
             loca_pydeck_chart(df9)
         with col902:
-            st.markdown("요약 현황")
-            st.dataframe(df9[["기준일자", "회사", "근무지", "인원"]].style.highlight_max(axis=0))
+            st.markdown("🍩 :green[**요약 현황**]")
+            st.dataframe(df10[["인원"]].style.highlight_max(axis=0))
         
     with tab802:
-        st.markdown(f"조회시점: {조회시점}")
+        st.markdown(f"**🌿 조회시점 : {조회시점}**")
         location_chart(df9)
 #################################################################################33
 
@@ -527,7 +527,7 @@ def story_of_stock():
     st.markdown("# 📈:red[Stock Market]")
     with st.expander("📢 **주요 설명**"):
         st.info('''
-                - 주요 경쟁사의 주가 현황을 조회할 수 있음 (Yahoo Finance Api 사용)
+                - 주요 경쟁사의 주가 현황을 조회할 수 있음 (Yahoo Finance)
             
                 ''')
 
@@ -536,10 +536,10 @@ def story_of_stock():
     today = datetime.now().strftime("%Y-%m-%d")
     # start_date = datetime(2015,1,1)
     end_date = datetime.now()
-    opts = st.multiselect("**Choose Companies** (복수 선택 가능)", (company_names), 
+    opts = st.multiselect("⚾**Choose Companies** (복수 선택 가능)", (company_names), 
                           ["Hyundai Infracore Co., Ltd.", "Hyundai Construction Equipment Co., Ltd.", "Caterpillar Inc.", "Komatsu Ltd.", "Sany Heavy Industry Co., Ltd",
                            "Doosan Bobcat Inc.", "Hitachi, Ltd.", "AB Volvo"])
-    start_date = st.selectbox("**Select Starting Date**", ("2015-01-01", "2019-01-01","2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01"), index=5)
+    start_date = st.selectbox("🌈**Select Starting Date**", ("2015-01-01", "2019-01-01","2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01"), index=5)
 
     tickers = []
     for opt in opts:
@@ -552,43 +552,37 @@ def story_of_stock():
         with lst[int(tickers.index(ticker))%2]:
             stock_chart(ticker, start_date)    
         
-    
-    pass
-
-
-
-
 ################################################
 
 
 with st.sidebar:
     st.header("🧭 **:red[HR] :blue[Data] Story**")
     st.markdown("---")
-    sdv1 = st.selectbox('**✏️ Select Story**', ["Present", "Future", "Outside", "Location", "Stock Market"])
+    sdv1 = st.selectbox('**✏️ Select Story**', ["🍅Present", "🌻Future", "🌳Outside", "🍁Location", "🍒Stock Market"])
     st.markdown("---")
     
     st.markdown(" 🪃 **:blue[Recent Updates]**")
-    st.markdown("- Stock Market Story 추가 (23.05.03)")
-    st.markdown("- 사업장별 인원현황 Story 추가 (23.05.02)")
-    st.markdown("- 국민연금 3월 Data 추가 (23.04.19)")
+    st.markdown("- Stock Market Story 추가 ('23.05.03)")
+    st.markdown("- 사업장별 인원현황 Story 추가 ('23.05.02)")
+    st.markdown("- 국민연금 3월 Data 추가 ('23.04.19)")
 
 
 
 
     
-if sdv1 == "Present":
+if sdv1 == "🍅Present":
     story_of_present()
     
-elif sdv1 == "Future":
+elif sdv1 == "🌻Future":
     st.markdown("### **🌞 :blue[설계연구직/사무기술직] 인력운영 계획 (:red[👷‍♂️ 개발중입니다. 🚧])**")
     story_of_future1()
     st.markdown("---")
     st.image(image1, caption='Data Image', width=1500)
 
-elif sdv1 == "Outside":
+elif sdv1 == "🌳Outside":
     story_of_outside()
     
-elif sdv1 == "Location":
+elif sdv1 == "🍁Location":
     show_location()
     
 else:
