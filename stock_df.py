@@ -28,10 +28,10 @@ def get_name(a):
     name = t_df[t_df["ticker"] == a]["l_name"]
     return name.values[0]
 
-def stock_chart(ticker, start):
+def stock_chart(ticker, start, end):
     with st.container():
         st.subheader(get_name(ticker))
-        df = get_info(ticker).history(period="id", start=start, end=today)
+        df = get_info(ticker).history(period="id", start=start, end=end)
         df_reverse = df.sort_index(ascending=False)
         
         fig = go.Figure(data=[go.Candlestick(x=df.index,
@@ -43,8 +43,19 @@ def stock_chart(ticker, start):
 
         st.plotly_chart(fig, use_container_width=True)
 
-        with st.expander("See Details"):
-            st.dataframe(df_reverse, height=200)
+        with st.expander(f"🥕 **See Details** ---- {yf.Ticker(ticker).info['longName']}"):
+            # st.dataframe(df_reverse, height=200)
+            # st.markdown(yf.Ticker(ticker).info)
+            try:
+                # st.markdown(f"💰 enterprise value : {yf.Ticker(ticker).info['enterpriseValue']:,} {yf.Ticker(ticker).info['currency']}")
+                st.markdown(f"💲 total revenue : {yf.Ticker(ticker).info['totalRevenue']:,} {yf.Ticker(ticker).info['currency']}")
+                st.markdown(f"💸 revenue growth: {yf.Ticker(ticker).info['revenueGrowth']}")
+                st.markdown(f"💵 ebita : {yf.Ticker(ticker).info['ebitda']:,} {yf.Ticker(ticker).info['currency']}")
+                st.markdown(f"💶 ebita margin : {yf.Ticker(ticker).info['ebitdaMargins']}")
+
+            except:
+                st.markdown("해당 값을 제공하지 않습니다.")
+            
 
 
 # Sidebar

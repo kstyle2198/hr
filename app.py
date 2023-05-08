@@ -6,11 +6,13 @@ from ipyvizzustory import Story, Slide, Step
 import plotly.express as px
 # import random
 # import time
-# import datetime
+from datetime import datetime, timedelta
+
 import plotly.figure_factory as ff
 from prepare_df import *
 from prepare_chart import *
 from stock_df import *
+from roughviz_chart import *
 from streamlit.components.v1 import html
 from PIL import Image
 import pydeck as pdk
@@ -492,7 +494,6 @@ def show_location():
         로_회사들 = st.multiselect('🔍 조회할 회사를 선택하세요(복수 선택 가능)',
                                ['HDX', 'HDI', 'HCE'],
                                ['HDX', 'HDI', 'HCE'])
-        # 로_회사들
     with col802:    
         기준일자들 = df.기준일자.unique().tolist()
         start, end = st.select_slider(
@@ -520,26 +521,38 @@ def show_location():
         
     with tab802:
         st.markdown(f"**🌿 조회시점 : {조회시점}**")
-        location_chart(df9)
+        location_chart(df9)        
+        
+
 #################################################################################33
+def date_range(start, end):
+    start = datetime.strptime(start, "%Y-%m-%d")
+    end = datetime.strptime(end, "%Y-%m-%d")
+    dates = [(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end-start).days+1)]
+    return dates
 
 def story_of_stock():
     st.markdown("# 📈:red[Stock Market]")
     with st.expander("📢 **주요 설명**"):
         st.info('''
-                - 주요 경쟁사의 주가 현황을 조회할 수 있음 (Yahoo Finance)
+                - 본 현황에서 제공하는 정보(숫자)의 출처는 Yahoo Finance임 
             
                 ''')
 
     t_df = pd.read_csv('ticker_code.csv')
     company_names = t_df["l_name"]
-    today = datetime.now().strftime("%Y-%m-%d")
-    # start_date = datetime(2015,1,1)
-    end_date = datetime.now()
+    end_date = datetime.now().strftime("%Y-%m-%d")
     opts = st.multiselect("⚾**Choose Companies** (복수 선택 가능)", (company_names), 
-                          ["Hyundai Infracore Co., Ltd.", "Hyundai Construction Equipment Co., Ltd.", "Caterpillar Inc.", "Komatsu Ltd.", "Sany Heavy Industry Co., Ltd",
-                           "Doosan Bobcat Inc.", "Hitachi, Ltd.", "AB Volvo"])
-    start_date = st.selectbox("🌈**Select Starting Date**", ("2015-01-01", "2019-01-01","2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01"), index=5)
+                          ["HD Hyundai Infracore Co., Ltd", "HD Hyundai Construction Equipment Co.,Ltd.", "Doosan Bobcat Inc.", "Caterpillar Inc.", "Komatsu Ltd.", "Hitachi, Ltd.", 
+                           "XCMG Construction Machinery Co., Ltd.", "Sany Heavy Industry Co., Ltd"])
+
+    주가조회기간 = date_range("2015-01-01", end_date)
+    주가start, 주가end = st.select_slider(
+            '**📅 주가 조회 기간**',
+            options=주가조회기간,
+            value=('2022-01-01', 주가조회기간[-1])) 
+
+
 
     tickers = []
     for opt in opts:
@@ -550,7 +563,7 @@ def story_of_stock():
 
     for ticker in tickers:
         with lst[int(tickers.index(ticker))%2]:
-            stock_chart(ticker, start_date)    
+            stock_chart(ticker, 주가start, 주가end)    
         
 ################################################
 
