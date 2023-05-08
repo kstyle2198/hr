@@ -47,7 +47,7 @@ def stock_chart(ticker, start, end):
             # st.dataframe(df_reverse, height=200)
             # st.markdown(yf.Ticker(ticker).info)
             try:
-                # st.markdown(f"💰 enterprise value : {yf.Ticker(ticker).info['enterpriseValue']:,} {yf.Ticker(ticker).info['currency']}")
+                st.markdown(f"💰 enterprise value : {yf.Ticker(ticker).info['enterpriseValue']:,} {yf.Ticker(ticker).info['currency']}")
                 st.markdown(f"💲 total revenue : {yf.Ticker(ticker).info['totalRevenue']:,} {yf.Ticker(ticker).info['currency']}")
                 st.markdown(f"💸 revenue growth: {yf.Ticker(ticker).info['revenueGrowth']}")
                 st.markdown(f"💵 ebita : {yf.Ticker(ticker).info['ebitda']:,} {yf.Ticker(ticker).info['currency']}")

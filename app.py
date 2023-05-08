@@ -531,11 +531,14 @@ def date_range(start, end):
     dates = [(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end-start).days+1)]
     return dates
 
-def story_of_stock():
-    st.markdown("# 📈:red[Stock Market]")
+def story_of_money():
+    st.markdown("## 📈:red[Stock Price and Financial Infos]")
     with st.expander("📢 **주요 설명**"):
         st.info('''
                 - 본 현황에서 제공하는 정보(숫자)의 출처는 Yahoo Finance임 
+                - Detail의 재무지표는 직년년도 연결 기준임
+                - EV(enterprise value): 기업가치를 의미하며, 시가총액 + 순차입금으로 산출 
+                - Ebita : 세금, 이자, 감가상각비 차감전 순이익 의미 (감가상각비 차감전이라 통상 영업이익보다는 높은 숫자로 나옴/경험치로 ebita margin이 영업이익률 대비 약 3% 정도 높음)
             
                 ''')
 
@@ -571,12 +574,12 @@ def story_of_stock():
 with st.sidebar:
     st.header("🧭 **:red[HR] :blue[Data] Story**")
     st.markdown("---")
-    sdv1 = st.selectbox('**✏️ Select Story**', ["🍅Present", "🌻Future", "🌳Outside", "🍁Location", "🍒Stock Market"])
+    sdv1 = st.selectbox('**✏️ Select Story**', ["🍅Present", "🌻Future", "🌳Outside", "🍁Location", "🍒Money"])
     st.markdown("---")
     
     st.markdown(" 🪃 **:blue[Recent Updates]**")
-    st.markdown("- Stock Market Story 추가 ('23.05.03)")
-    st.markdown("- 사업장별 인원현황 Story 추가 ('23.05.02)")
+    st.markdown("- Money Story 추가 ('23.05.03)")
+    st.markdown("- Location Story 추가 ('23.05.02)")
     st.markdown("- 국민연금 3월 Data 추가 ('23.04.19)")
 
 
@@ -599,7 +602,7 @@ elif sdv1 == "🍁Location":
     show_location()
     
 else:
-    story_of_stock()
+    story_of_money()
     
     
   
