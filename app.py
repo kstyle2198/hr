@@ -536,7 +536,7 @@ def story_of_money():
     with st.expander("📢 **주요 설명**"):
         st.info('''
                 - 본 현황에서 제공하는 정보(숫자)의 출처는 Yahoo Finance임 
-                - Detail의 재무지표는 직년년도 연결 기준임
+                - Detail의 재무지표는 직전년도 연결 기준임
                 - EV(enterprise value): 기업가치를 의미하며, 시가총액 + 순차입금으로 산출 
                 - Ebita : 세금, 이자, 감가상각비 차감전 순이익 의미 (감가상각비 차감전이라 통상 영업이익보다는 높은 숫자로 나옴/경험치로 ebita margin이 영업이익률 대비 약 3% 정도 높음)
             
