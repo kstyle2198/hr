@@ -1,17 +1,11 @@
-import pandas as pd
-import numpy as np
 import streamlit as st
 from ipyvizzustory import Story, Slide, Step
 from ipyvizzu import Chart, Data, Config, Style, DisplayTarget
-import pickle
 import plotly.express as px
-import random
-import datetime
 import plotly.figure_factory as ff
 from prepare_df import *
 import roughviz
 import pydeck as pdk
-import random
 
 
 @st.cache_data

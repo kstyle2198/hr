@@ -1,11 +1,6 @@
 import pandas as pd
-import numpy as np
 import streamlit as st
-from ipyvizzu import Data, Config, Style
-from ipyvizzustory import Story, Slide, Step
-import plotly.express as px
-# import random
-# import time
+
 from datetime import datetime, timedelta
 
 import plotly.figure_factory as ff

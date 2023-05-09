@@ -279,7 +279,7 @@ def 사무설계연구채용(df1, 회사, 채용시점, random_state, 채용인�
         # random.shuffle(그룹핑범위)
         # print(f"그룹핑 범위 : {그룹핑범위}")
     
-        for i in range(채용인원):
+        for _ in range(채용인원):
 
             연령범위 = 채용_df[채용_df["직급"] == 직급]["연령"].quantile([.0, .5]).values.tolist()
             연령범위 = [연령범위[0], 연령범위[1]+1]  # 인원이 적어서 시작과 끝 연령이 같은 경우가 있어서 인위적으로 끝 연령에 +1
@@ -429,16 +429,3 @@ if __name__ == "__main__":
     # print(t_df[t_df["회사"]=="HDI"]["기준일자"].unique())
     gdf1 = create_ipyvizzu_gdf(df)
     print(racing_df1(gdf1).info())
-
-
-
-
-
-
-
-
-
-
-
-
-

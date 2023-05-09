@@ -1,8 +1,8 @@
 # pip install yfinance
+from datetime import datetime
 import streamlit as st
 import yfinance as yf
 import pandas as pd
-from datetime import datetime
 import plotly.graph_objects as go
 
 
@@ -56,37 +56,4 @@ def stock_chart(ticker, start, end):
             except:
                 st.markdown("해당 값을 제공하지 않습니다.")
             
-
-
-# Sidebar
-# st.sidebar.title("Sidebar")
-
-# opts = st.sidebar.multiselect("Choose Companies", (company_names))
-# print(opts)
-# tickers = []
-# for opt in opts:
-#     tickers.append(get_ticker(opt))
-# # print(tickers)
-
-# start_date = st.sidebar.selectbox("Select the Starting Date", ("2015-01-01", "2016-01-01", "2017-01-01", "2018-01-01", "2019-01-01","2020-01-01"))
-
-
-
-# # Main
-# st.write("# Stock Price")
-
-# col1, col2 = st.columns(2)
-# lst = [col1, col2]
-
-# for ticker in tickers:
-#     # print(int(tickers.index(ticker))%2)
-#     with lst[int(tickers.index(ticker))%2]:
-#         stock_chart(ticker)
-
-
-# st.markdown("---")
-
-            
-# st.markdown("---")
-# st.dataframe(get_states("CAT"))
 
