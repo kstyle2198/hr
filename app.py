@@ -555,8 +555,6 @@ def story_of_money():
             options=주가조회기간,
             value=('2022-01-01', 주가조회기간[-1])) 
 
-
-
     tickers = []
     for opt in opts:
         tickers.append(get_ticker(opt))
