@@ -253,7 +253,7 @@ def story_of_present():
 ################################################################
 ################################################################
 
-image1 = Image.open('./images/Data-Science.jpeg')
+# image1 = Image.open('./images/Data-Science.jpeg')
 
 def 사무설계연구시뮬(df, 회사, 시작기준시점, 퇴사시점, 채용시점, 승급시점, random_state, 직급별퇴사율, 채용인원비율들, 직급별승진율):
     
@@ -364,16 +364,16 @@ def story_of_future1():
         st.markdown("---")
 
         # 2023년 시뮬레이션
-        simul1 = 사무설계연구시뮬(df, select201, "t20230101", "t20230401", "t20230801", "t20240101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
+        simul1 = 사무설계연구시뮬(df, select201, "t20230101", "t20230801", "t20230901", "t20240101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
         df100 = simul1[0]
         퇴사입사승급인원_2023 = simul1[1]
         
         # 2024년 시뮬레이션
-        simul2 = 사무설계연구시뮬(df100, select201, "t20240101", "t20240401", "t20240801", "t20250101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
+        simul2 = 사무설계연구시뮬(df100, select201, "t20240101", "t20240801", "t20240901", "t20250101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
         df101 = simul2[0]
         퇴사입사승급인원_2024 = simul2[1]
         # 2025년 시뮬레이션
-        simul3 = 사무설계연구시뮬(df101, select201, "t20250101", "t20250401", "t20250801", "t20260101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
+        simul3 = 사무설계연구시뮬(df101, select201, "t20250101", "t20250801", "t20250901", "t20260101", int(select200), 직급별퇴사율, 채용인원비율들, 직급별승진율)
         df102 = simul3[0]
         퇴사입사승급인원_2025 = simul3[1]
 
@@ -386,7 +386,10 @@ def story_of_future1():
             value=('t20230101', 기준일자들[-1]))
                 
         기준일자들1 = 기준일자들[기준일자들.index(start):기준일자들.index(end)+1]
-        # st.write(기준일자들1)
+        st.write(기준일자들1)
+        
+        
+        
     
         submitted1 = st.form_submit_button("**✔️ Submit1**")
         
@@ -396,28 +399,17 @@ def story_of_future1():
         if submitted1:
             total_df = total_df.loc[(total_df["회사"] == select201)&(total_df["사원유형"].isin(select202))&(total_df["기준일자"].isin(기준일자들1))]
             gdf7 = create_ipyvizzu_gdf1(total_df)
+            
             vz_인력운영계획(gdf7)
             
             st.markdown("---")
-            
-            # gdf10 = racing_df1(total_df)
-            # col4112, col4122 = st.columns([1, 1])
-            # with col4112:
-            #     회사선택41 = st.selectbox('**회사 선택41**', ['HDX', 'HDI', 'HCE'])
-            # with col4122:
-            #     Speed = st.selectbox('**속도 선택** (숫자가 작을수록 빠름)', [2, 3, 4, 5])
-            # CHART = vz_racing_chart1(gdf10, 회사선택41, Speed)
-            # html(CHART, height=500)
 
-            # st.plotly_chart(chart1(기준일자들1, total_df), theme="streamlit", use_container_width=True)
             
-            st.markdown(f"2023년 인원 변동 : {퇴사입사승급인원_2023}")
-            st.markdown(f"2024년 인원 변동 : {퇴사입사승급인원_2024}")
-            st.markdown(f"2025년 인원 변동 : {퇴사입사승급인원_2025}")
+            st.markdown(f"2023년 인원 변동 : {퇴사입사승급인원_2023}, 퇴사계: {sum(퇴사입사승급인원_2023['퇴사'])}, 입사계: {sum(퇴사입사승급인원_2023['입사'])}")
+            st.markdown(f"2024년 인원 변동 : {퇴사입사승급인원_2024}, 퇴사계: {sum(퇴사입사승급인원_2024['퇴사'])}, 입사계: {sum(퇴사입사승급인원_2024['입사'])}")
+            st.markdown(f"2025년 인원 변동 : {퇴사입사승급인원_2025}, 퇴사계: {sum(퇴사입사승급인원_2025['퇴사'])}, 입사계: {sum(퇴사입사승급인원_2025['입사'])}")
             
-            st.markdown("---")            
-
-
+            st.markdown("---")
 ########################################################
 
 def story_of_outside():
@@ -432,9 +424,10 @@ def story_of_outside():
             st.info('''
                     - 본 화면의 인원변동은 국민연금 가입자(직원수), 신규취득, 자격상실 인원 숫자임
                     - 신규취득 및 자격상실에는 일반적인 입사/퇴사 외에 계열사간 **전적입출**도 포함됨 
-                    - 평균소득월액은 국민연금 고지액 인당 평균을 연금보험요율 9%(사용자 4.5% + 근로자 4.5%)로 나눈 숫자로 추정값으로 참고 요망
+                    - 평균소득월액은 국민연금 고지액 인당 평균을 연금보험요율 9%(사용자 4.5% + 근로자 4.5%)로 나눈(역산) 숫자로 추정값으로 참고 요망
                     - 평균소득월액에는 임원, 직원 등 급여지급 대상자가 모두 포함되며, 기준소득월액에 상한, 하한액이 적용되어 실제 보수액과 차이가 있을 수 있음
-                    - 기준소득월액 상한/하한액 변경시점은 매년 7월임 (그래서 7월에 수준변동 발생)
+                     (기준소득월액 = 재직시 지급된 각 급여항목에 대한 1년간 소득총액 / 365 * 30)
+                    - 기준소득월액 상한/하한액 변경시점은 매년 7월임 (그래서 7월에 수준변동 발생 / 22년 7월 기준 상한액 553만원, 23년 7월 상한액 590만원 예정)
                     - 평균소득월액 단위는 "원"임
                     ''')
         
@@ -503,7 +496,7 @@ def show_location():
     df9 = location_df(df, 로_회사들, 조회시점)
     df10 = df9.set_index(keys=["기준일자", "회사", "근무지"])
     
-    tab801, tab802 = st.tabs(["**:green[유형1]🪴**", '**:blue[유형2]🪵**'])
+    tab801, tab802 = st.tabs(["**🪵:green[유형1]**", '**🪴:blue[유형2]**'])
     with tab801:
         
         col901, col902 = st.columns([7.5, 2.5])
@@ -571,9 +564,10 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown(" 🪃 **:blue[Recent Updates]**")
+    st.markdown("- 국민연금 4월 Data 추가 ('23.05.19)")
     st.markdown("- Money Story 추가 ('23.05.03)")
     st.markdown("- Location Story 추가 ('23.05.02)")
-    st.markdown("- 국민연금 3월 Data 추가 ('23.04.19)")
+    
 
 
 
@@ -583,10 +577,10 @@ if sdv1 == "🍅Present":
     story_of_present()
     
 elif sdv1 == "🌻Future":
-    st.markdown("### **🌞 :blue[설계연구직/사무기술직] 인력운영 계획 (:red[👷‍♂️ 개발중입니다. 🚧])**")
+    st.markdown("### **🌞 :blue[설계연구직/사무기술직] 인력운영 계획 (:red[👷‍♂️ 수정중인데.. 여전히 앞뒤로 숫자 안맞음..ㅠㅠ🚧])**")
     story_of_future1()
     st.markdown("---")
-    st.image(image1, caption='Data Image', width=1500)
+    # st.image(image1, caption='Data Image', width=1500)
 
 elif sdv1 == "🌳Outside":
     story_of_outside()

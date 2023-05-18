@@ -370,16 +370,16 @@ def roughviz_chart(df):
     return rough_vz
 
 #####################################################################################################################
-@st.cache_data
-def chart1(기준일자들, df):
-    기준일자들 = 기준일자들
+# @st.cache_data
+# def chart1(기준일자들, df):
+#     기준일자들 = 기준일자들
 
-    t_df = df[df["기준일자"].isin(기준일자들)]
-    gdf = t_df.groupby(["기준일자","회사"])[["임시키"]].count().reset_index()
-    gdf.rename(columns={'임시키':'인원'}, inplace=True)
-    fig = px.bar(gdf, x="기준일자", y=["인원"], color="회사", barmode="relative",opacity=0.6, text_auto=True, category_orders= {'인원': ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]})
-    fig.update_layout(legend_traceorder="reversed", width=1400, height=400)
-    return fig
+#     t_df = df[df["기준일자"].isin(기준일자들)]
+#     gdf = t_df.groupby(["기준일자","회사"])[["임시키"]].count().reset_index()
+#     gdf.rename(columns={'임시키':'인원'}, inplace=True)
+#     fig = px.bar(gdf, x="기준일자", y=["인원"], color="회사", barmode="relative",opacity=0.6, text_auto=True, category_orders= {'인원': ["HL1", "HL2", "HL3(1)", "HL3(2)", "HL3(3)"]})
+#     fig.update_layout(legend_traceorder="reversed", width=1400, height=400)
+#     return fig
 
 
 @st.cache_data
@@ -387,7 +387,6 @@ def vz_인력운영계획(df):
     data1 = Data()
     data1.add_data_frame(df)
     my_style = vz_style()
-    # story1 = Story(data = data1)
     story1 = Story(data = data1, style = my_style)
     story1.set_feature("tooltip", True)
     story1.set_size(width=1500, height=700)
@@ -460,6 +459,9 @@ def vz_인력운영계획(df):
 
     story1.play()
     
+    
+
+###################################################################################################################    
 @st.cache_data
 def pension_chart1(df, col):
     tdf = df

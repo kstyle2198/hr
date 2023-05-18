@@ -12,21 +12,26 @@ today = datetime.now().strftime("%Y-%m-%d")
 start_date = datetime(2015,1,1)
 end_date = datetime.now()
 
+@st.cache_resource
 def get_info(name):
     company = yf.Ticker(name)
     return company
 
+@st.cache_resource
 def get_states(name):
     company = yf.Ticker(name).financials
     return company
 
+@st.cache_resource
 def get_ticker(a):
     ticker = t_df[t_df["l_name"] == a]["ticker"]
     return ticker.values[0]
 
+@st.cache_resource
 def get_name(a):
     name = t_df[t_df["ticker"] == a]["l_name"]
     return name.values[0]
+
 
 def stock_chart(ticker, start, end):
     with st.container():
