@@ -484,21 +484,13 @@ def pension_chart1(df, col):
 def pension_chart2(df, lst):
     tdf = df
     fig = go.Figure()
-    for l in lst:
-        fig.add_trace(go.Scatter(x=tdf["기준일자"].tolist(), y=tdf[l].tolist(), mode='lines+markers+text', name=l, text = tdf[l].tolist()))
-        fig.update_traces(textposition='top center', marker_size=10, textfont={"family": "Arial", "size": 12, "color": "red"})
+    my_colors = ["red", "blue"]
+    for idx, l in enumerate(lst):
+        fig.add_trace(go.Scatter(x=tdf["기준일자"].tolist(), y=tdf[l].tolist(), mode='lines+markers+text', name=l, text = tdf[l].tolist(), line={"color":my_colors[idx]}))
+    fig.update_traces(textposition='top center', marker_size=10, textfont={"family": "Arial", "size": 12, "color": "green"})
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
  
     
-    
-    
-
-
-
-
-
-
-
 
 @st.cache_data
 def location_chart(df, mode='light'):
