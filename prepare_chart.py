@@ -2,6 +2,7 @@ import streamlit as st
 from ipyvizzustory import Story, Slide, Step
 from ipyvizzu import Chart, Data, Config, Style, DisplayTarget
 import plotly.express as px
+import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from prepare_df import *
 import roughviz
@@ -476,7 +477,28 @@ def pension_chart1(df, col):
     fig.update_traces(textposition='top center')
     
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+
+
+@st.cache_data
+def pension_chart2(df, lst):
+    tdf = df
+    fig = go.Figure()
+    for l in lst:
+        fig.add_trace(go.Scatter(x=tdf["기준일자"].tolist(), y=tdf[l].tolist(), mode='lines+markers+text', name=l, text = tdf[l].tolist()))
+        fig.update_traces(textposition='top center', marker_size=10, textfont={"family": "Arial", "size": 12, "color": "red"})
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+ 
     
+    
+    
+
+
+
+
+
+
+
 
 @st.cache_data
 def location_chart(df, mode='light'):

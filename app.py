@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from datetime import datetime, timedelta
-
+import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from prepare_df import *
 from prepare_chart import *
@@ -437,7 +437,7 @@ def story_of_outside():
         
         연_조회정보 = st.selectbox('✏️ 조회할 정보를 선택하세요',
                               ('직원수', '신규취득', '자격상실', '평균소득월액'))
-        
+        연_조회정보
         
         연금기준일자들 = p_df.기준일자.unique().tolist()
         start, end = st.select_slider(
@@ -446,23 +446,34 @@ def story_of_outside():
             value=('2022-03', 연금기준일자들[-1]))       
         연금기준일자들1 = 연금기준일자들[연금기준일자들.index(start):연금기준일자들.index(end)+1]
         
-        p_df1 = p_df.loc[(p_df["기준일자"].isin(연금기준일자들1))&(p_df["약식명"].isin(연_회사들))]
-        
+        p_df1 = p_df.loc[(p_df["기준일자"].isin(연금기준일자들1))&(p_df["약식명"].isin(연_회사들))]        
         요약통계 = p_df1.groupby(['약식명'])[['직원수', '신규취득', '자격상실', '평균소득월액']].mean().round().astype(int).reset_index()
         요약통계 = 요약통계.set_index(keys='약식명')
 
 
         # Every form must have a submit button.
-        submitted = st.form_submit_button("Submit")
+        submitted = st.form_submit_button("Submit1")
         if submitted:
             st.markdown("---")
             col901, col902 = st.columns([7, 3])
             with col901:
                 pension_chart1(p_df1, 연_조회정보)
+                
+                st.markdown("---")
+                with st.expander("🍉 특정 회사의 신규취득 및 자격상실만 따로조회 하기"):
+                    연_회사들1 = st.selectbox('🔍 조회할 회사를 선택하세요',
+                                ('HDX', 'HDI', 'HCE', '두산밥캣', '볼보코리아', '두산산차', '엠트론', '모트롤', '한양정밀', '대동', '삼성전자', '현대차', '모비스'))
+                    p_df2 = p_df.loc[(p_df["기준일자"].isin(연금기준일자들1))&(p_df["약식명"]==연_회사들1)]     
+                    
+                    pension_chart2(p_df2, ["신규취득", "자격상실"])
+
+                
+                
             with col902:
                 st.markdown("##### **조회대상 **월 평균값** (Highests in Yellow)**")
                 st.dataframe(요약통계.style.highlight_max(axis=0))
 
+        
 ################################################################################
 
 def show_location():
