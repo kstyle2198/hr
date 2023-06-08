@@ -50,7 +50,7 @@ def create_summary_df(df):
 
 @st.cache_data
 def create_ipyvizzu_gdf(df):
-    gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑", "연령","연령대", "Level1", "Level2"])[["임시키"]].count().reset_index()
+    gdf = df.groupby(["기준일자", "회사", "고용형태", "사원유형", "성별","그룹핑", "연령", "연령대", "Level1", "Level2", "겸직임원체크"])[["임시키"]].count().reset_index()
     gdf['기준일자']= pd.Categorical(gdf['기준일자'], categories=기준일자정렬, ordered=True)
     gdf['회사']= pd.Categorical(gdf['회사'], categories=회사정렬, ordered=True)
     gdf['고용형태']= pd.Categorical(gdf['고용형태'], categories=고용형태정렬, ordered=True)
