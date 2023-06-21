@@ -576,7 +576,7 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown(" 🪃 **:blue[Recent Updates]**")
-    st.markdown("- 국민연금 4월 Data 추가 ('23.05.19)")
+    st.markdown("- 국민연금 5월 Data 추가 ('23.06.21)")
     st.markdown("- Money Story 추가 ('23.05.03)")
     st.markdown("- Location Story 추가 ('23.05.02)")
     
